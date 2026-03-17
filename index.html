@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPÜ Spor Kulübü – Dumlupınar Üniversitesi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        :root{
+            --navy:#0d1b3e;
+            --navy2:#1a3a6e;
+            --red:#06b6d4;
+            --red2:#0891b2;
+            --gold:#f0c040;
+            --white:#fff;
+            --light:#f4f6f9;
+            --dark:#1a1a2e;
+            --text:#333;
+            --muted:#666;
+            --border:#e8e8e8;
+        }
+        html{scroll-behavior:smooth;}
+        body{font-family:'Inter',sans-serif;color:var(--text);background:var(--white);overflow-x:hidden;}
+
+        /* ── LOADER ── */
+        #loader{
+            position:fixed;inset:0;background:var(--navy);z-index:9999;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;
+            transition:opacity .6s, visibility .6s;
+        }
+        #loader.hide{opacity:0;visibility:hidden;}
+        .loader-logo{
+            width:90px;height:90px;background:var(--red);border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:1.8rem;font-weight:900;color:#fff;
+            border:3px solid var(--gold);
+            animation:loaderPulse 1s ease-in-out infinite;
+        }
+        @keyframes loaderPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);box-shadow:0 0 40px rgba(6,182,212,.6);}}
+        .loader-bar{width:200px;height:3px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden;}
+        .loader-fill{height:100%;background:var(--gold);border-radius:3px;animation:fill 1.8s ease forwards;}
+        @keyframes fill{from{width:0;}to{width:100%;}}
+        .loader-text{color:rgba(255,255,255,.6);font-size:.8rem;letter-spacing:3px;text-transform:uppercase;}
+
+        /* ── NAVBAR ── */
+        nav{
+            position:fixed;top:0;width:100%;z-index:1000;
+            background:rgba(13,27,62,.97);backdrop-filter:blur(12px);
+            border-bottom:3px solid var(--red);
+            padding:0 2rem;height:68px;
+            display:flex;align-items:center;justify-content:space-between;
+            transition:box-shadow .3s;
+        }
+        nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.4);}
+        .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+        .nav-brand-circle{
+            width:44px;height:44px;background:var(--red);border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-weight:900;font-size:.9rem;color:#fff;
+            border:2px solid var(--gold);flex-shrink:0;
+        }
+        .nav-brand-text{color:#fff;font-weight:700;font-size:1rem;line-height:1.25;}
+        .nav-brand-text small{display:block;font-size:.6rem;color:var(--gold);font-weight:400;letter-spacing:2px;}
+        .nav-links{display:flex;gap:.1rem;list-style:none;}
+        .nav-links a{
+            color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem;font-weight:500;
+            padding:.45rem .75rem;border-radius:6px;transition:.25s;letter-spacing:.3px;
+        }
+        .nav-links a:hover,.nav-links a.active{color:#fff;background:var(--red);}
+        .nav-phone{
+            display:flex;align-items:center;gap:.4rem;
+            color:var(--gold);font-size:.82rem;font-weight:600;text-decoration:none;
+        }
+        .nav-right{display:flex;align-items:center;gap:1rem;}
+        .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+        .hamburger span{display:block;width:24px;height:2.5px;background:#fff;border-radius:3px;transition:.3s;}
+        .hamburger.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+        .hamburger.open span:nth-child(2){opacity:0;}
+        .hamburger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
+
+        /* ── HERO ── */
+        #hero{
+            min-height:100vh;padding-top:68px;
+            background:linear-gradient(135deg,#080f22 0%,var(--navy) 50%,#0a1628 100%);
+            display:flex;align-items:center;justify-content:center;
+            text-align:center;position:relative;overflow:hidden;
+        }
+        .hero-bg-shapes{position:absolute;inset:0;overflow:hidden;}
+        .shape{position:absolute;border-radius:50%;filter:blur(90px);opacity:.18;}
+        .shape1{width:560px;height:560px;background:var(--red);top:-120px;left:-120px;animation:drift1 12s ease-in-out infinite;}
+        .shape2{width:440px;height:440px;background:var(--navy2);bottom:-60px;right:-60px;animation:drift2 15s ease-in-out infinite;}
+        .shape3{width:320px;height:320px;background:var(--gold);top:50%;left:50%;transform:translate(-50%,-50%);opacity:.10;animation:drift3 10s ease-in-out infinite;}
+        @keyframes drift1{0%,100%{transform:translate(0,0);}50%{transform:translate(40px,30px);}}
+        @keyframes drift2{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,-40px);}}
+        @keyframes drift3{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.3);}}
+
+        /* ── SPORT CHARACTERS ── */
+        #sport-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;}
+        .sc{
+            position:absolute;
+            opacity:0;
+            pointer-events:none;
+            user-select:none;
+            filter:drop-shadow(0 0 18px rgba(255,255,255,.55))
+                   drop-shadow(0 0 36px rgba(6,182,212,.45));
+            will-change:transform,opacity;
+            transform-origin:center center;
+        }
+        /* YÜZME – sinüs dalgası yatay sürüş */
+        @keyframes swim{
+            0%  {transform:translateX(-60px)  translateY(0)     rotate(-10deg) scale(1);}
+            15% {transform:translateX(10px)   translateY(-30px)  rotate(5deg)  scale(1.06);}
+            30% {transform:translateX(70px)   translateY(2px)   rotate(-10deg) scale(1);}
+            45% {transform:translateX(130px)  translateY(-28px)  rotate(6deg)  scale(1.06);}
+            60% {transform:translateX(90px)   translateY(4px)   rotate(-8deg)  scale(1);}
+            78% {transform:translateX(20px)   translateY(-20px)  rotate(3deg)  scale(1.04);}
+            100%{transform:translateX(-60px)  translateY(0)     rotate(-10deg) scale(1);}
+        }
+        /* BASKETBOL – gerçekçi zıplama fiziği */
+        @keyframes basket{
+            0%   {transform:translateY(0)      scaleX(1)    scaleY(1)    rotate(0deg);}
+            8%   {transform:translateY(0)      scaleX(1.25) scaleY(.78)  rotate(0deg);}
+            28%  {transform:translateY(-95px)  scaleX(1)    scaleY(1.12) rotate(-16deg);}
+            50%  {transform:translateY(-95px)  scaleX(1)    scaleY(1.12) rotate(16deg);}
+            72%  {transform:translateY(-12px)  scaleX(1)    scaleY(1)    rotate(4deg);}
+            88%  {transform:translateY(0)      scaleX(1.3)  scaleY(.72)  rotate(0deg);}
+            94%  {transform:translateY(-12px)  scaleX(1)    scaleY(1.06) rotate(0deg);}
+            100% {transform:translateY(0)      scaleX(1)    scaleY(1)    rotate(0deg);}
+        }
+        /* VOLEYBOL – smaç atlayışı + iniş */
+        @keyframes voley{
+            0%,100%{transform:translateY(0)      rotate(0)     scale(1);}
+            12%    {transform:translateY(0)      rotate(0)     scale(.9);}
+            32%    {transform:translateY(-105px) rotate(-22deg) scale(1.1);}
+            52%    {transform:translateY(-105px) rotate(28deg)  scale(1.1);}
+            68%    {transform:translateY(-35px)  rotate(10deg)  scale(1);}
+            82%    {transform:translateY(0)      rotate(0)     scale(.93);}
+        }
+        /* TENİS – raket sallama */
+        @keyframes tenis{
+            0%  {transform:rotate(-62deg) scale(.82) translateX(-12px);}
+            22% {transform:rotate(-28deg) scale(.94) translateX(0);}
+            44% {transform:rotate(52deg)  scale(1.18) translateX(16px);}
+            58% {transform:rotate(58deg)  scale(1.12) translateX(10px);}
+            78% {transform:rotate(8deg)   scale(1)   translateX(0);}
+            100%{transform:rotate(-62deg) scale(.82) translateX(-12px);}
+        }
+        /* MASA TENİSİ – hızlı bilek sağ-sol */
+        @keyframes masa{
+            0%,100%{transform:translateX(0)     rotate(-14deg) scaleX(1);}
+            20%    {transform:translateX(42px)  rotate(14deg)  scaleX(.93);}
+            38%    {transform:translateX(-8px)  rotate(-8deg)  scaleX(1);}
+            58%    {transform:translateX(42px)  rotate(14deg)  scaleX(.93);}
+            78%    {transform:translateX(-4px)  rotate(-6deg)  scaleX(1);}
+        }
+        /* PİLATES – nefes + yükseli */
+        @keyframes pilates{
+            0%,100%{transform:scale(1)    rotate(0deg)  translateY(0);}
+            25%    {transform:scale(1.12) rotate(3deg)  translateY(-10px);}
+            50%    {transform:scale(1.38) rotate(7deg)  translateY(-18px);}
+            75%    {transform:scale(1.12) rotate(3deg)  translateY(-10px);}
+        }
+        /* ZUMBA – ritmik dans */
+        @keyframes zumba{
+            0%  {transform:rotate(-22deg) translateY(0)    scaleX(1);}
+            12% {transform:rotate(16deg)  translateY(-20px) scaleX(.88);}
+            25% {transform:rotate(-16deg) translateY(0)    scaleX(1);}
+            38% {transform:rotate(22deg)  translateY(-18px) scaleX(.88);}
+            50% {transform:rotate(-12deg) translateY(0)    scaleX(1);}
+            62% {transform:rotate(20deg)  translateY(-16px) scaleX(.9);}
+            75% {transform:rotate(-14deg) translateY(0)    scaleX(1);}
+            88% {transform:rotate(18deg)  translateY(-14px) scaleX(.9);}
+            100%{transform:rotate(-22deg) translateY(0)    scaleX(1);}
+        }
+        /* Yüzen top – tam döngü */
+        @keyframes floatBall{
+            0%  {transform:translateY(0)     rotate(0deg)   scale(1);}
+            25% {transform:translateY(-22px) rotate(90deg)  scale(1.06);}
+            50% {transform:translateY(-38px) rotate(180deg) scale(1);}
+            75% {transform:translateY(-22px) rotate(270deg) scale(1.06);}
+            100%{transform:translateY(0)     rotate(360deg) scale(1);}
+        }
+
+        .hero-particles{position:absolute;inset:0;}
+        .particle{
+            position:absolute;border-radius:50%;
+            animation:particleFloat linear infinite;opacity:0;
+        }
+        @keyframes particleFloat{
+            0%{transform:translateY(100vh) rotate(0);opacity:0;}
+            5%{opacity:.4;}95%{opacity:.4;}
+            100%{transform:translateY(-10vh) rotate(720deg);opacity:0;}
+        }
+        .hero-content{position:relative;z-index:2;max-width:860px;padding:2rem;}
+        .hero-badge{
+            display:inline-flex;align-items:center;gap:.5rem;
+            background:rgba(6,182,212,.2);border:1px solid rgba(6,182,212,.5);
+            color:rgba(255,255,255,.9);font-size:.72rem;font-weight:600;
+            letter-spacing:2px;padding:.4rem 1.2rem;border-radius:20px;margin-bottom:2rem;
+            text-transform:uppercase;
+        }
+        .badge-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:blink 1.5s infinite;}
+        @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+        .hero-logo{
+            width:130px;height:130px;background:var(--red);border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:2.2rem;font-weight:900;color:#fff;
+            border:4px solid var(--gold);margin:0 auto 2rem;
+            box-shadow:0 0 60px rgba(6,182,212,.5);
+            animation:heroGlow 3s ease-in-out infinite;
+        }
+        @keyframes heroGlow{0%,100%{box-shadow:0 0 60px rgba(6,182,212,.5);}50%{box-shadow:0 0 100px rgba(6,182,212,.8),0 0 160px rgba(6,182,212,.3);}}
+        .hero-title{
+            font-size:clamp(2rem,5.5vw,4rem);font-weight:900;color:#fff;
+            line-height:1.1;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:1px;
+        }
+        .hero-title .accent{color:var(--gold);}
+        .hero-sub{font-size:clamp(.9rem,2.5vw,1.2rem);color:rgba(255,255,255,.5);letter-spacing:4px;margin-bottom:.8rem;text-transform:uppercase;}
+        .hero-slogan{font-size:.95rem;color:rgba(255,255,255,.55);font-style:italic;margin-bottom:3rem;}
+        .hero-stats{display:flex;justify-content:center;gap:3.5rem;margin-bottom:3rem;}
+        .stat-item{text-align:center;}
+        .stat-num{font-size:2.8rem;font-weight:900;color:var(--gold);display:block;line-height:1;}
+        .stat-lbl{font-size:.7rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:2px;margin-top:.3rem;}
+        .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+        .btn-red{
+            background:var(--red);color:#fff;padding:.85rem 2.5rem;border-radius:50px;
+            text-decoration:none;font-weight:700;font-size:.9rem;letter-spacing:.5px;
+            transition:.3s;border:2px solid var(--red);
+        }
+        .btn-red:hover{background:transparent;color:var(--red);transform:translateY(-3px);box-shadow:0 12px 30px rgba(6,182,212,.4);}
+        .btn-ghost{
+            background:transparent;color:#fff;padding:.85rem 2.5rem;border-radius:50px;
+            text-decoration:none;font-weight:700;font-size:.9rem;letter-spacing:.5px;
+            border:2px solid rgba(255,255,255,.3);transition:.3s;
+        }
+        .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.1);transform:translateY(-3px);}
+        .scroll-down{
+            position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+            display:flex;flex-direction:column;align-items:center;gap:.5rem;
+            color:rgba(255,255,255,.3);font-size:.65rem;letter-spacing:3px;text-transform:uppercase;
+        }
+        .scroll-arrow{width:20px;height:20px;border-right:2px solid rgba(255,255,255,.3);border-bottom:2px solid rgba(255,255,255,.3);transform:rotate(45deg);animation:scrollBounce 1.5s infinite;}
+        @keyframes scrollBounce{0%,100%{transform:rotate(45deg) translate(0,0);}50%{transform:rotate(45deg) translate(5px,5px);}}
+
+        /* ── SECTION COMMON ── */
+        section{padding:6rem 2rem;}
+        .container{max-width:1200px;margin:0 auto;}
+        .sec-head{text-align:center;margin-bottom:4rem;}
+        .sec-tag{
+            display:inline-block;background:var(--red);color:#fff;
+            font-size:.65rem;font-weight:700;letter-spacing:3px;
+            padding:.3rem 1rem;border-radius:20px;margin-bottom:.8rem;text-transform:uppercase;
+        }
+        .sec-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;color:var(--navy);line-height:1.15;}
+        .sec-title .accent{color:var(--red);}
+        .sec-line{width:50px;height:4px;background:var(--red);margin:.8rem auto 0;border-radius:2px;}
+        .reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease;}
+        .reveal.visible{opacity:1;transform:none;}
+
+        /* ── HAKKIMIZDA ── */
+        #hakkimizda{background:var(--light);}
+        .about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+        .about-left{}
+        .about-card-main{
+            background:var(--navy);border-radius:24px;padding:2.5rem;color:#fff;
+            text-align:center;position:relative;overflow:hidden;margin-bottom:1rem;
+        }
+        .about-card-main::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:var(--red);border-radius:50%;opacity:.12;}
+        .about-card-main .card-circle{width:80px;height:80px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:#fff;border:2px solid var(--gold);margin:0 auto 1rem;}
+        .about-card-main h3{font-size:1.1rem;margin-bottom:.4rem;}
+        .about-card-main p{font-size:.83rem;color:rgba(255,255,255,.55);line-height:1.7;}
+        .about-minis{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+        .mini{background:#fff;border-radius:14px;padding:1.2rem;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.07);}
+        .mini .ico{font-size:1.6rem;margin-bottom:.4rem;}
+        .mini strong{display:block;font-size:1.2rem;color:var(--red);font-weight:800;}
+        .mini span{font-size:.72rem;color:var(--muted);}
+        .about-right h2{font-size:1.9rem;font-weight:900;color:var(--navy);margin-bottom:1.2rem;line-height:1.2;}
+        .about-right h2 .accent{color:var(--red);}
+        .about-right p{color:var(--muted);line-height:1.85;font-size:.92rem;margin-bottom:.9rem;}
+        .feat-list{list-style:none;margin-top:1.4rem;}
+        .feat-list li{display:flex;align-items:flex-start;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.88rem;color:#444;}
+        .feat-list li:last-child{border-bottom:none;}
+        .feat-check{width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;flex-shrink:0;margin-top:1px;}
+
+        /* ── BRANŞLAR ── */
+        #branslar{background:#fff;}
+        .brans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1.8rem;}
+        .brans-card{
+            border-radius:20px;overflow:hidden;background:#fff;
+            box-shadow:0 6px 25px rgba(0,0,0,.08);transition:.4s ease;
+        }
+        .brans-card:hover{transform:translateY(-10px);box-shadow:0 20px 60px rgba(0,0,0,.15);}
+        .brans-top{
+            height:190px;display:flex;flex-direction:column;align-items:center;
+            justify-content:center;position:relative;overflow:hidden;
+        }
+        .brans-top::before{content:'';position:absolute;inset:0;background:inherit;filter:brightness(.65);transition:.4s;}
+        .brans-card:hover .brans-top::before{filter:brightness(.4);}
+        .brans-top .bicon{font-size:3.8rem;position:relative;z-index:1;transition:.4s;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4));}
+        .brans-card:hover .bicon{transform:scale(1.2) rotate(-5deg);}
+        .brans-top .bname{position:relative;z-index:1;color:#fff;font-size:1.25rem;font-weight:800;text-shadow:0 2px 10px rgba(0,0,0,.5);margin-top:.4rem;letter-spacing:.5px;text-transform:uppercase;}
+        .b-yuzme .brans-top{background:linear-gradient(135deg,#0066cc,#00a8e8);}
+        .b-basketbol .brans-top{background:linear-gradient(135deg,#c8102e,#ff6b35);}
+        .b-voleybol .brans-top{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);}
+        .b-tenis .brans-top{background:linear-gradient(135deg,#2e7d32,#66bb6a);}
+        .b-masatenisi .brans-top{background:linear-gradient(135deg,#6a1b9a,#ab47bc);}
+        .b-pilates .brans-top{background:linear-gradient(135deg,#ad1457,#f48fb1);}
+        .b-zumba .brans-top{background:linear-gradient(135deg,#e65100,#ffcc02);}
+        .b-jimnastik .brans-top{background:linear-gradient(135deg,#00796b,#26c6da);}
+        .brans-body{padding:1.4rem;}
+        .brans-body p{color:var(--muted);font-size:.84rem;line-height:1.75;margin-bottom:1.1rem;}
+        .brans-info{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.1rem;}
+        .binfo{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:#555;}
+        .binfo-ic{width:26px;height:26px;background:var(--light);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;}
+        .brans-foot{border-top:1px solid var(--border);padding-top:1.1rem;display:flex;gap:.7rem;align-items:center;}
+        .btn-ig{
+            display:flex;align-items:center;gap:.4rem;flex:1;justify-content:center;
+            background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+            color:#fff;text-decoration:none;padding:.48rem 1rem;border-radius:20px;
+            font-size:.75rem;font-weight:600;transition:.3s;
+        }
+        .btn-ig:hover{transform:scale(1.04);box-shadow:0 4px 15px rgba(6,182,212,.4);}
+        .brans-pill{background:var(--light);color:var(--muted);padding:.45rem .8rem;border-radius:20px;font-size:.72rem;font-weight:600;}
+
+        /* ── BAŞARILAR ── */
+        #basarilar{background:var(--navy);padding:5rem 2rem;}
+        #basarilar .sec-title{color:#fff;}
+        #basarilar .sec-tag{background:var(--gold);color:var(--navy);}
+        .basari-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.5rem;}
+        .basari-card{
+            background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+            border-radius:18px;padding:2rem 1.5rem;text-align:center;transition:.3s;
+        }
+        .basari-card:hover{background:rgba(255,255,255,.12);transform:translateY(-5px);}
+        .basari-ico{font-size:3rem;margin-bottom:.8rem;}
+        .basari-card h3{color:#fff;font-size:1rem;font-weight:700;margin-bottom:.5rem;}
+        .basari-card p{color:rgba(255,255,255,.45);font-size:.8rem;line-height:1.6;}
+        .basari-card .byear{display:inline-block;background:var(--red);color:#fff;font-size:.65rem;padding:.2rem .7rem;border-radius:20px;margin-top:.7rem;font-weight:600;}
+
+        /* ── DUYURULAR ── */
+        #duyurular{background:var(--light);}
+        .duyuru-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+        .duyuru-card{
+            background:#fff;border-radius:16px;padding:1.8rem;
+            box-shadow:0 4px 20px rgba(0,0,0,.06);
+            border-left:4px solid var(--red);transition:.3s;position:relative;
+        }
+        .duyuru-card:hover{transform:translateX(5px);box-shadow:0 8px 30px rgba(0,0,0,.1);}
+        .duyuru-date{font-size:.7rem;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:.7rem;}
+        .duyuru-card h3{color:var(--navy);font-size:.95rem;font-weight:700;margin-bottom:.6rem;line-height:1.4;}
+        .duyuru-card p{color:var(--muted);font-size:.83rem;line-height:1.65;}
+        .duyuru-tag{display:inline-block;background:var(--red);color:#fff;font-size:.65rem;padding:.2rem .7rem;border-radius:20px;margin-top:.9rem;font-weight:600;}
+
+        /* ── TAKVİM ── */
+        #takvim{background:#fff;}
+        .table-wrap{overflow-x:auto;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.09);}
+        table{width:100%;border-collapse:collapse;background:#fff;min-width:700px;}
+        thead{background:var(--navy);}
+        thead th{padding:1.1rem 1rem;color:#fff;font-size:.78rem;font-weight:700;letter-spacing:1px;text-align:left;text-transform:uppercase;}
+        tbody tr{border-bottom:1px solid #f0f0f0;transition:.2s;}
+        tbody tr:last-child{border-bottom:none;}
+        tbody tr:hover{background:var(--light);}
+        tbody td{padding:.9rem 1rem;font-size:.84rem;color:#444;}
+        tbody td:first-child{font-weight:700;color:var(--navy);}
+        .time-chip{display:inline-block;background:var(--red);color:#fff;font-size:.68rem;padding:.2rem .55rem;border-radius:4px;font-weight:600;}
+        .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+        .flex-row{display:flex;align-items:center;gap:.5rem;}
+
+        /* ── ANTRENÖRLER ── */
+        #antrenorler{background:var(--light);}
+        .antrenor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.8rem;}
+        .antrenor-card{
+            background:#fff;border-radius:20px;overflow:hidden;
+            box-shadow:0 6px 25px rgba(0,0,0,.08);transition:.35s;text-align:center;
+        }
+        .antrenor-card:hover{transform:translateY(-8px);box-shadow:0 16px 45px rgba(0,0,0,.14);}
+        .antrenor-avatar{
+            height:180px;display:flex;align-items:center;justify-content:center;
+            font-size:4.5rem;position:relative;
+        }
+        .antrenor-avatar.bg1{background:linear-gradient(135deg,#0066cc,#00a8e8);}
+        .antrenor-avatar.bg2{background:linear-gradient(135deg,#06b6d4,#0ea5e9);}
+        .antrenor-avatar.bg3{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);}
+        .antrenor-avatar.bg4{background:linear-gradient(135deg,#2e7d32,#66bb6a);}
+        .antrenor-avatar.bg5{background:linear-gradient(135deg,#6a1b9a,#ab47bc);}
+        .antrenor-avatar.bg6{background:linear-gradient(135deg,#ad1457,#f48fb1);}
+        .antrenor-avatar.bg7{background:linear-gradient(135deg,#e65100,#ffcc02);}
+        .antrenor-body{padding:1.4rem;}
+        .antrenor-body h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.3rem;}
+        .antrenor-body .branch{font-size:.75rem;color:var(--red);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:.5rem;}
+        .antrenor-body p{font-size:.8rem;color:var(--muted);line-height:1.6;}
+
+        /* ── GALERİ ── */
+        #galeri{background:#fff;}
+        .galeri-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+        .gitem{
+            border-radius:14px;overflow:hidden;aspect-ratio:1;position:relative;
+            cursor:pointer;
+        }
+        .gitem .gplaceholder{
+            width:100%;height:100%;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;
+            transition:.35s;
+        }
+        .gitem .gplaceholder .gico{font-size:2.8rem;transition:.35s;}
+        .gitem .gplaceholder span{font-size:.68rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.8);text-transform:uppercase;}
+        .gitem:hover .gplaceholder{filter:brightness(.6);}
+        .gitem:hover .gplaceholder .gico{transform:scale(1.2);}
+        .gitem img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:.35s;}
+        .gitem:hover img{transform:scale(1.05);filter:brightness(.75);}
+        .gitem:nth-child(1){grid-column:span 2;}
+        .gitem:nth-child(5){grid-column:span 2;}
+        .gitem:nth-child(7){grid-column:span 2;}
+        .g-overlay{position:absolute;inset:0;background:rgba(6,182,212,.7);display:flex;align-items:center;justify-content:center;font-size:2rem;opacity:0;transition:.3s;border-radius:14px;}
+        .gitem:hover .g-overlay{opacity:1;}
+        .ig-cta{text-align:center;margin-top:2.5rem;}
+        .ig-cta p{color:var(--muted);font-size:.92rem;margin-bottom:1.2rem;}
+        .btn-ig-big{
+            display:inline-flex;align-items:center;gap:.5rem;
+            background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+            color:#fff;text-decoration:none;padding:.9rem 2.5rem;border-radius:50px;
+            font-size:.95rem;font-weight:700;transition:.3s;
+        }
+        .btn-ig-big:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(6,182,212,.4);}
+
+        /* ── İLETİŞİM ── */
+        #iletisim{background:var(--light);}
+        .iletisim-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:3rem;}
+        .iletisim-info h3{font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:2rem;}
+        .info-items{display:flex;flex-direction:column;gap:1.4rem;}
+        .info-item{display:flex;gap:1rem;align-items:flex-start;}
+        .info-icon{width:46px;height:46px;background:var(--navy);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+        .info-item h4{font-size:.72rem;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:.25rem;}
+        .info-item p,.info-item a{font-size:.9rem;font-weight:600;color:var(--navy);text-decoration:none;}
+        .info-item a:hover{color:var(--red);}
+        .sosyal-sec{margin-top:2rem;}
+        .sosyal-sec h4{font-size:.72rem;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:.9rem;}
+        .sosyal-list{display:flex;flex-wrap:wrap;gap:.6rem;}
+        .sosyal-btn{
+            display:inline-flex;align-items:center;gap:.35rem;
+            background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+            color:#fff;text-decoration:none;padding:.4rem .9rem;border-radius:20px;
+            font-size:.74rem;font-weight:600;transition:.3s;
+        }
+        .sosyal-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(6,182,212,.4);}
+        .map-wrap{margin-top:2rem;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.1);}
+        .map-placeholder{
+            height:200px;background:linear-gradient(135deg,var(--navy),var(--navy2));
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;color:#fff;
+        }
+        .map-placeholder .map-ico{font-size:2.5rem;}
+        .map-placeholder p{font-size:.82rem;color:rgba(255,255,255,.6);text-align:center;padding:0 1rem;}
+        .map-placeholder a{
+            background:var(--red);color:#fff;text-decoration:none;padding:.5rem 1.2rem;border-radius:20px;font-size:.78rem;font-weight:600;transition:.3s;
+        }
+        .map-placeholder a:hover{background:var(--red2);}
+        .form-box{background:#fff;border-radius:20px;padding:2.5rem;box-shadow:0 8px 30px rgba(0,0,0,.07);}
+        .form-box h3{font-size:1.2rem;font-weight:800;color:var(--navy);margin-bottom:1.8rem;}
+        .form-group{margin-bottom:1.1rem;}
+        .form-group label{display:block;font-size:.72rem;font-weight:600;color:#777;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.5px;}
+        .form-group input,.form-group select,.form-group textarea{
+            width:100%;padding:.75rem 1rem;border:2px solid var(--border);border-radius:10px;
+            font-size:.88rem;font-family:inherit;color:var(--text);transition:.3s;background:var(--light);
+        }
+        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--red);background:#fff;}
+        .form-group textarea{min-height:110px;resize:vertical;}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+        .btn-send{
+            width:100%;background:var(--red);color:#fff;border:none;padding:.95rem;
+            border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;
+            transition:.3s;letter-spacing:.5px;font-family:inherit;
+        }
+        .btn-send:hover{background:var(--red2);transform:translateY(-2px);box-shadow:0 8px 20px rgba(6,182,212,.4);}
+
+        /* ── FOOTER ── */
+        footer{background:#05091a;color:rgba(255,255,255,.45);padding:3.5rem 2rem 1.5rem;}
+        .footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.08);}
+        .footer-brand .fb-logo{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+        .fb-circle{width:42px;height:42px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:900;color:#fff;border:2px solid var(--gold);}
+        .fb-name{color:#fff;font-weight:700;font-size:.9rem;line-height:1.3;}
+        .fb-name small{display:block;font-size:.58rem;color:var(--gold);letter-spacing:2px;font-weight:400;}
+        .footer-brand p{font-size:.8rem;line-height:1.75;color:rgba(255,255,255,.3);}
+        .fcol h4{color:rgba(255,255,255,.8);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:1.1rem;padding-bottom:.7rem;border-bottom:2px solid var(--red);display:inline-block;}
+        .fcol ul{list-style:none;}
+        .fcol ul li{margin-bottom:.55rem;}
+        .fcol ul li a{color:rgba(255,255,255,.35);text-decoration:none;font-size:.8rem;transition:.2s;}
+        .fcol ul li a:hover{color:var(--red);}
+        .footer-bottom{max-width:1200px;margin:1.5rem auto 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem;}
+        .footer-bottom p{font-size:.75rem;color:rgba(255,255,255,.25);}
+        .footer-bottom span{color:var(--red);}
+
+        /* ── FLOATING PHONE ── */
+        #floatPhone{
+            position:fixed;bottom:5.5rem;right:2rem;z-index:998;
+            width:52px;height:52px;background:#25d366;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+            box-shadow:0 4px 20px rgba(37,211,102,.5);transition:.3s;
+            text-decoration:none;
+        }
+        #floatPhone:hover{transform:scale(1.1);box-shadow:0 6px 25px rgba(37,211,102,.7);}
+        #backTop{
+            position:fixed;bottom:2rem;right:2rem;z-index:998;
+            width:52px;height:52px;background:var(--red);border-radius:50%;
+            display:none;align-items:center;justify-content:center;
+            color:#fff;font-size:1.2rem;font-weight:700;cursor:pointer;
+            border:none;box-shadow:0 4px 20px rgba(6,182,212,.4);transition:.3s;
+        }
+        #backTop:hover{background:var(--red2);transform:translateY(-3px);}
+        #backTop.show{display:flex;}
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:1000px){
+            .about-wrap,.iletisim-wrap{grid-template-columns:1fr;}
+            .footer-grid{grid-template-columns:1fr 1fr;}
+        }
+        @media(max-width:700px){
+            .nav-links{
+                display:none;position:fixed;top:68px;left:0;right:0;
+                background:rgba(13,27,62,.98);flex-direction:column;
+                padding:1.5rem;gap:.3rem;border-bottom:3px solid var(--red);
+            }
+            .nav-links.open{display:flex;}
+            .nav-links a{padding:.75rem 1rem;font-size:.95rem;}
+            .nav-phone{display:none;}
+            .hamburger{display:flex;}
+            section{padding:4rem 1rem;}
+            .hero-stats{gap:2rem;}
+            .stat-num{font-size:2.1rem;}
+            .galeri-grid{grid-template-columns:1fr 1fr;}
+            .gitem:nth-child(1),.gitem:nth-child(5){grid-column:span 1;}
+            .footer-grid{grid-template-columns:1fr;}
+            .form-row{grid-template-columns:1fr;}
+            .basari-grid{grid-template-columns:1fr 1fr;}
+        }
+        @media(max-width:420px){
+            .hero-btns{flex-direction:column;align-items:center;}
+            .basari-grid{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+    <div class="loader-logo">DPÜ</div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+    <p class="loader-text">DPÜ Spor Kulübü</p>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav">
+    <a href="#hero" class="nav-brand">
+        <div class="nav-brand-circle">DPÜ</div>
+        <div class="nav-brand-text">
+            DPÜ Spor Kulübü
+            <small>DUMLUPINAR ÜNİVERSİTESİ</small>
+        </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#hakkimizda">Hakkımızda</a></li>
+        <li><a href="#branslar">Branşlar</a></li>
+        <li><a href="#basarilar">Başarılar</a></li>
+        <li><a href="#duyurular">Duyurular</a></li>
+        <li><a href="#takvim">Takvim</a></li>
+        <li><a href="#antrenorler">Antrenörler</a></li>
+        <li><a href="#galeri">Galeri</a></li>
+        <li><a href="#iletisim">İletişim</a></li>
+    </ul>
+    <div class="nav-right">
+        <a href="tel:05380738864" class="nav-phone">📞 0538 073 88 64</a>
+        <div class="hamburger" id="ham" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="hero-bg-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+    </div>
+    <div id="sport-bg"></div>
+    <div class="hero-particles" id="particles"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Kütahya'nın Lider Spor Kulübü
+        </div>
+        <div class="hero-logo">DPÜ</div>
+        <h1 class="hero-title">Dumlupınar<br><span class="accent">Spor Kulübü</span></h1>
+        <p class="hero-sub">Üniversitesi</p>
+        <p class="hero-slogan">"Kütahya'nın en çok branşta eğitim veren spor kulübü"</p>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-num" data-target="8">0</span>
+                <span class="stat-lbl">Branş</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num" data-target="4370">0</span>
+                <span class="stat-lbl">Takipçi</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num" data-target="613">0</span>
+                <span class="stat-lbl">Gönderi</span>
+            </div>
+        </div>
+        <div class="hero-btns">
+            <a href="#branslar" class="btn-red">Branşları Keşfet</a>
+            <a href="#iletisim" class="btn-ghost">Kayıt Ol</a>
+        </div>
+    </div>
+    <div class="scroll-down">
+        <span>Keşfet</span>
+        <div class="scroll-arrow"></div>
+    </div>
+</section>
+
+<!-- HAKKIMIZDA -->
+<section id="hakkimizda">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Biz Kimiz</div>
+            <h2 class="sec-title">Hakkı<span class="accent">mızda</span></h2>
+            <div class="sec-line"></div>
+        </div>
+        <div class="about-wrap">
+            <div class="about-left reveal">
+                <div class="about-card-main">
+                    <div class="card-circle">DPÜ</div>
+                    <h3>DPÜ Spor Kulübü</h3>
+                    <p>Dumlupınar Üniversitesi Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde, Kütahya'nın en kapsamlı spor eğitim merkezi.</p>
+                </div>
+                <div class="about-minis">
+                    <div class="mini"><div class="ico">🏅</div><strong>8</strong><span>Aktif Branş</span></div>
+                    <div class="mini"><div class="ico">👨‍🏫</div><strong>Uzman</strong><span>Antrenörler</span></div>
+                    <div class="mini"><div class="ico">📍</div><strong>DPÜ</strong><span>Kampüs İçi</span></div>
+                    <div class="mini"><div class="ico">🎓</div><strong>SBF</strong><span>Akademik Destek</span></div>
+                </div>
+            </div>
+            <div class="about-right reveal">
+                <h2>Sporda <span class="accent">Mükemmelliği</span><br>Birlikte Yaşıyoruz</h2>
+                <p>Dumlupınar Üniversitesi Spor Kulübü olarak, Kütahya'da yaşayan herkese kaliteli spor eğitimi sunmak için faaliyet gösteriyoruz. Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde, uzman antrenörlerimizle 8 farklı branşta eğitim veriyoruz.</p>
+                <p>Çocuklardan yetişkinlere kadar geniş bir yaş yelpazesine hitap eden programlarımızla, bireylerin hem fiziksel hem de zihinsel gelişimine katkı sağlamayı amaçlıyoruz.</p>
+                <ul class="feat-list">
+                    <li><div class="feat-check">✓</div>Spor Bilimleri Fakültesi akademisyenlerinin gözetimi</li>
+                    <li><div class="feat-check">✓</div>8 farklı branşta uzman antrenör kadrosu</li>
+                    <li><div class="feat-check">✓</div>Çocuklardan yetişkinlere tüm yaş grupları</li>
+                    <li><div class="feat-check">✓</div>Modern tesisler ve profesyonel ekipmanlar</li>
+                    <li><div class="feat-check">✓</div>Uygun fiyatlı, kaliteli spor eğitimi</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BRANŞLAR -->
+<section id="branslar">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Spor Dalları</div>
+            <h2 class="sec-title">Branş<span class="accent">larımız</span></h2>
+            <div class="sec-line"></div>
+        </div>
+        <div class="brans-grid">
+            <!-- Yüzme -->
+            <div class="brans-card b-yuzme reveal">
+                <div class="brans-top"><div class="bicon">🏊</div><div class="bname">Yüzme</div></div>
+                <div class="brans-body">
+                    <p>Olimpik havuzda profesyonel yüzme eğitimi. Çocuklar ve yetişkinler için ayrı programlarla temel tekniklerden ileri antrenmanlarına kadar.</p>
+                    <div class="brans-info">
+                        <div class="binfo"><div class="binfo-ic">👶</div>Tüm yaş grupları</div>
+                        <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Yüzme Havuzu</div>
+                    </div>
+                    <div class="brans-foot">
+                        <a href="https://www.instagram.com/dpusk.yuzme" target="_blank" class="btn-ig">📷 @dpusk.yuzme</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Basketbol -->
+            <div class="brans-card b-basketbol reveal">
+                <div class="brans-top"><div class="bicon">🏀</div><div class="bname">Basketbol</div></div>
+                <div class="brans-body">
+                    <p>6-16 yaş kız ve erkek çocuklara yönelik basketbol eğitimi. Temel becerilerden taktiksel oyun anlayışına kadar kapsamlı gelişim.</p>
+                    <div class="brans-info">
+                        <div class="binfo"><div class="binfo-ic">🎂</div>6-16 yaş, Kız &amp; Erkek</div>
+                        <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Spor Salonu, Kütahya</div>
+                    </div>
+                    <div class="brans-foot">
+                        <a href="https://www.instagram.com/dpusk.basketbol" target="_blank" class="btn-ig">📷 @dpusk.basketbol</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Voleybol -->
+            <div class="brans-card b-voleybol reveal">
+                <div class="brans-top"><div class="bicon">🏐</div><div class="bname">Voleybol</div></div>
+                <div class="brans-body">
+                    <p>Voleybolun temel tekniklerini öğrenmek veya mevcut seviyeni geliştirmek isteyenler için kapsamlı eğitim. Takım ruhu ve teknik gelişim.</p>
+                    <div class="brans-info">
+                        <div class="binfo"><div class="binfo-ic">👥</div>Takım eğitimi</div>
+                        <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Spor Salonu</div>
+                    </div>
+                    <div class="brans-foot">
+                        <a href="https://www.instagram.com/dpuskvoleybol" target="_blank" class="btn-ig">📷 @dpuskvoleybol</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Tenis -->
+            <div class="brans-card b-tenis reveal">
+                <div class="brans-top"><div class="bicon">🎾</div><div class="bname">Tenis</div></div>
+                <div class="brans-body">
+                    <p>Başlangıçtan ileri seviyeye tenis eğitimi. Raket tutuşundan strateji ve koordinasyona kadar her aşamada profesyonel destek.</p>
+                    <div class="brans-info">
+                        <div class="binfo"><div class="binfo-ic">🎯</div>Başlangıç – İleri Seviye</div>
+                        <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Tenis Kortları</div>
+                    </div>
+                    <div class="brans-foot">
+                        <a href="https://www.instagram.com/dpusktenis" target="_blank" class="btn-ig">📷 @dpusktenis</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Masa Tenisi -->
+            <div class="brans-card b-masatenisi reveal">
+                <div class="brans-top"><div class="bicon">🏓</div><div class="bname">Masa Tenisi</div></div>
+                <div class="brans-body">
+                    <p>Hız, refleks ve konsantrasyon gerektiren masa tenisinde uzman antrenörlerle gelişimini hızlandır. Her yaştan sporcu için programlar.</p>
+                    <div class="brans-info">
+                        <div class="binfo"><div class="binfo-ic">⚡</div>Hız &amp; Refleks Geliştirme</div>
+                        <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Spor Tesisleri</div>
+                    </div>
+                    <div class="brans-foot">
+                        <a href="https://www.instagram.com/dpusk_masatenisi" target="_blank" class="btn-ig">📷 @dpusk_masatenisi</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Pilates -->
+            <div class="brans-card b-pilates reveal">
+                <div class="brans-top"><div class="bicon">🧘</div><div class="bname">Pilates</div></div>
+                <div class="brans-body">
+                    <p>Reformer ve mat pilates programlarıyla vücudunu güçlendir, esnekliğini artır. Postür düzeltme ve core güçlendirme odaklı profesyonel eğitim.</p>
+                    <div class="brans-info">
+                        <div class="binfo"><div class="binfo-ic">💪</div>Reformer &amp; Mat Pilates</div>
+                        <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Pilates Stüdyosu</div>
+                    </div>
+                    <div class="brans-foot">
+                        <a href="https://www.instagram.com/dpusk.pilates" target="_blank" class="btn-ig">📷 @dpusk.pilates</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Zumba -->
+            <div class="brans-card b-zumba reveal">
+                <div class="brans-top"><div class="bicon">💃</div><div class="bname">Zumba</div></div>
+                <div class="brans-body">
+                    <p>Latin ritimler eşliğinde eğlenceli ve enerjik dans-fitness seansları. Kalori yakmanın bu kadar eğlenceli olabileceğini keşfet!</p>
+                    <div class="brans-info">
+                        <div class="binfo"><div class="binfo-ic">🎵</div>Dans &amp; Fitness</div>
+                        <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Spor Salonu</div>
+                    </div>
+                    <div class="brans-foot">
+                        <a href="https://www.instagram.com/dpusporkulubu" target="_blank" class="btn-ig">📷 @dpusporkulubu</a>
+                        <span class="brans-pill">Yakında IG</span>
+                    </div>
+                </div>
+            <!-- Jimnastik -->
+            <div class="brans-card b-jimnastik reveal">
+                <div class="brans-top"><div class="bicon">🤸</div><div class="bname">Jimnastik</div></div>
+                <div class="brans-body">
+                    <p>Artistik ve ritmik jimnastik eğitimleriyle denge, koordinasyon ve esnekliğini geliştir. Tüm yaş gruplarına yönelik profesyonel antrenman programları.</p>
+                    <div class="brans-info">
+                        <div class="binfo"><div class="binfo-ic">🤸</div>Artistik &amp; Ritmik</div>
+                        <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Jimnastik Salonu</div>
+                    </div>
+                    <div class="brans-foot">
+                        <a href="https://www.instagram.com/dpusk_jimnastik_" target="_blank" class="btn-ig">📷 @dpusk_jimnastik_</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BAŞARILAR -->
+<section id="basarilar">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Gurur & Başarı</div>
+            <h2 class="sec-title" style="color:#fff;">Başarı<span class="accent">larımız</span></h2>
+            <div class="sec-line" style="background:var(--gold);"></div>
+        </div>
+        <div class="basari-grid">
+            <div class="basari-card reveal">
+                <div class="basari-ico">🏆</div>
+                <h3>Kütahya Şampiyonu</h3>
+                <p>Kütahya Gençlik ve Spor İl Müdürlüğü organizasyonunda basketbol dalında şampiyonluk.</p>
+                <span class="byear">2024</span>
+            </div>
+            <div class="basari-card reveal">
+                <div class="basari-ico">🥇</div>
+                <h3>Voleybol Birincilik</h3>
+                <p>Üniversitelerarası voleybol turnuvasında üstün performans ile birincilik elde edildi.</p>
+                <span class="byear">2024</span>
+            </div>
+            <div class="basari-card reveal">
+                <div class="basari-ico">🏅</div>
+                <h3>Yüzme Başarısı</h3>
+                <p>İl geneli yüzme yarışmalarında sporcularımız podiyuma çıkmayı başardı.</p>
+                <span class="byear">2023</span>
+            </div>
+            <div class="basari-card reveal">
+                <div class="basari-ico">🎾</div>
+                <h3>Tenis Turnuvası</h3>
+                <p>Bölgesel tenis turnuvasında genç sporcularımız başarılı dereceler elde etti.</p>
+                <span class="byear">2023</span>
+            </div>
+            <div class="basari-card reveal">
+                <div class="basari-ico">⭐</div>
+                <h3>En Fazla Branş</h3>
+                <p>Kütahya'nın en fazla branşta eğitim veren spor kulübü unvanını koruyor.</p>
+                <span class="byear">2025</span>
+            </div>
+            <div class="basari-card reveal">
+                <div class="basari-ico">📈</div>
+                <h3>4.000+ Takipçi</h3>
+                <p>Instagram'da 4.370 takipçiye ulaşarak Kütahya'nın en çok takip edilen spor kulübü.</p>
+                <span class="byear">2025</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DUYURULAR -->
+<section id="duyurular">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Haberler</div>
+            <h2 class="sec-title">Duyuru<span class="accent">lar</span></h2>
+            <div class="sec-line"></div>
+        </div>
+        <div class="duyuru-grid">
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Mart 2025</div>
+                <h3>2025 Bahar Dönemi Kayıtları Başladı!</h3>
+                <p>Tüm branşlarımızda bahar dönemi kayıtları başlamıştır. Sınırlı kontenjanlar için hemen iletişime geçin.</p>
+                <span class="duyuru-tag">Tüm Branşlar</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Şubat 2025</div>
+                <h3>Yüzme Kursu – Yeni Grup Açıldı</h3>
+                <p>Yüzme branşımızda yeni başlangıç grubu açılmıştır. 6 yaş ve üzeri tüm bireyler başvurabilir.</p>
+                <span class="duyuru-tag">Yüzme</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Ocak 2025</div>
+                <h3>Pilates Reformer Sınıfları Başlıyor</h3>
+                <p>Modern Reformer cihazlarıyla pilates eğitimlerimiz başlıyor. Vücut farkındalığı ve güçlendirme programı.</p>
+                <span class="duyuru-tag">Pilates</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Aralık 2024</div>
+                <h3>Basketbol – Kütahya Gençlik Turnuvası</h3>
+                <p>Basketbol takımımız Kütahya Gençlik ve Spor İl Müdürlüğü organizasyonunda mücadele etti.</p>
+                <span class="duyuru-tag">Basketbol</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Kasım 2024</div>
+                <h3>Stajyer Antrenör Başvuruları Açıldı</h3>
+                <p>DPÜ SBF akademisyenleri gözetiminde görev almak isteyen stajyer antrenörler için başvurular açıktır.</p>
+                <span class="duyuru-tag">Tüm Branşlar</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Ekim 2024</div>
+                <h3>Zumba Dersleri Yeni Dönemde de Devam Ediyor</h3>
+                <p>Popüler Zumba derslerimiz yeni dönemde de devam ediyor. Latin müzik eşliğinde eğlenceli antrenmanlar.</p>
+                <span class="duyuru-tag">Zumba</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TAKVİM -->
+<section id="takvim">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Haftalık Program</div>
+            <h2 class="sec-title">Antrenman <span class="accent">Takvimi</span></h2>
+            <div class="sec-line"></div>
+        </div>
+        <div class="table-wrap reveal">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Branş</th>
+                        <th>Pazartesi</th>
+                        <th>Salı</th>
+                        <th>Çarşamba</th>
+                        <th>Perşembe</th>
+                        <th>Cuma</th>
+                        <th>C.tesi</th>
+                        <th>Pazar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="flex-row"><div class="dot" style="background:#0066cc"></div>🏊 Yüzme</div></td>
+                        <td>–</td>
+                        <td><span class="time-chip">19:00–20:30</span> <small style="color:#aaa;font-size:.65rem;">Kara</small></td>
+                        <td><span class="time-chip">19:00–20:30</span> <small style="color:#aaa;font-size:.65rem;">Kara</small></td>
+                        <td><span class="time-chip">19:00–20:30</span></td>
+                        <td><span class="time-chip">19:00–20:30</span></td>
+                        <td><span class="time-chip">13:00–14:00</span><br><span class="time-chip">15:00–16:00</span><br><span class="time-chip">17:00–18:30</span> <small style="color:#aaa;font-size:.65rem;">Temel</small></td>
+                        <td><span class="time-chip">13:00–14:00</span><br><span class="time-chip">15:00–16:00</span><br><span class="time-chip">17:00–18:30</span> <small style="color:#aaa;font-size:.65rem;">Temel</small></td>
+                    </tr>
+                    <tr>
+                        <td><div class="flex-row"><div class="dot" style="background:#c8102e"></div>🏀 Basketbol</div></td>
+                        <td><span class="time-chip">16:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">16:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">16:00</span></td>
+                        <td><span class="time-chip">11:00</span></td>
+                        <td>–</td>
+                    </tr>
+                    <tr>
+                        <td><div class="flex-row"><div class="dot" style="background:#0d1b3e"></div>🏐 Voleybol</div></td>
+                        <td>–</td>
+                        <td><span class="time-chip">17:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">17:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">10:00</span></td>
+                        <td>–</td>
+                    </tr>
+                    <tr>
+                        <td><div class="flex-row"><div class="dot" style="background:#2e7d32"></div>🎾 Tenis</div></td>
+                        <td><span class="time-chip">10:00</span></td>
+                        <td><span class="time-chip">10:00</span></td>
+                        <td><span class="time-chip">10:00</span></td>
+                        <td><span class="time-chip">10:00</span></td>
+                        <td><span class="time-chip">10:00</span></td>
+                        <td>–</td>
+                        <td>–</td>
+                    </tr>
+                    <tr>
+                        <td><div class="flex-row"><div class="dot" style="background:#6a1b9a"></div>🏓 Masa Tenisi</div></td>
+                        <td>–</td>
+                        <td><span class="time-chip">14:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">14:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">11:00</span></td>
+                        <td>–</td>
+                    </tr>
+                    <tr>
+                        <td><div class="flex-row"><div class="dot" style="background:#ad1457"></div>🧘 Pilates</div></td>
+                        <td><span class="time-chip">11:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">11:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">11:00</span></td>
+                        <td>–</td>
+                        <td>–</td>
+                    </tr>
+                    <tr>
+                        <td><div class="flex-row"><div class="dot" style="background:#e65100"></div>💃 Zumba</div></td>
+                        <td>–</td>
+                        <td><span class="time-chip">18:00</span></td>
+                        <td>–</td>
+                        <td><span class="time-chip">18:00</span></td>
+                        <td>–</td>
+                        <td>–</td>
+                        <td>–</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="text-align:center;color:#bbb;font-size:.75rem;margin-top:1rem;">* Saatler değişebilir. Güncel program için iletişime geçin: 0538 073 88 64</p>
+    </div>
+</section>
+
+<!-- ANTRENÖRLER -->
+<section id="antrenorler">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Kadromuz</div>
+            <h2 class="sec-title">Antrenör<span class="accent">lerimiz</span></h2>
+            <div class="sec-line"></div>
+        </div>
+        <!-- BAŞKAN -->
+        <div style="margin-bottom:2.5rem;">
+            <div class="antrenor-card reveal" style="max-width:400px;margin:0 auto;border:3px solid var(--gold);">
+                <div class="antrenor-avatar bg2" style="height:240px;position:relative;overflow:hidden;">
+                    <img src="baskan.jpg" alt="Doç. Dr. Osman Tolga Şinoforoğlu"
+                        style="width:100%;height:100%;object-fit:cover;object-position:center top;"
+                        onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:5rem;">👨‍💼</div>
+                </div>
+                <div class="antrenor-body">
+                    <div style="display:inline-block;background:var(--gold);color:var(--navy);font-size:.65rem;font-weight:800;padding:.25rem .8rem;border-radius:20px;margin-bottom:.5rem;letter-spacing:1px;">BAŞKAN & BAŞ ANTRENÖR</div>
+                    <h3 style="font-size:1.1rem;">Doç. Dr. Osman Tolga Şinoforoğlu</h3>
+                    <div class="branch">Dumlupınar Üniversitesi Spor Kulübü</div>
+                    <p>DPÜ Spor Bilimleri Fakültesi öğretim üyesi. Kulübümüzün kurucu başkanı ve baş antrenörü olarak tüm branşları akademik düzeyde yönetmektedir.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANTRENÖRLER (Alfabetik) -->
+        <div class="antrenor-grid">
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg1">🏋️</div><div class="antrenor-body"><h3>Ada Cerrah</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg2">🏋️</div><div class="antrenor-body"><h3>Ahmet Hamdi Bayraktar</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg3">🏋️</div><div class="antrenor-body"><h3>Beyzagül Akgün</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg4">🏋️</div><div class="antrenor-body"><h3>Boğaçhan Yıldırım</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg5">🏋️</div><div class="antrenor-body"><h3>Cerem Karsak</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg6">🏋️</div><div class="antrenor-body"><h3>Ceren Bal</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg7">🏋️</div><div class="antrenor-body"><h3>Çağatay Ayyıldız</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg1">🏋️</div><div class="antrenor-body"><h3>Doğukan Bilici</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg2">🏋️</div><div class="antrenor-body"><h3>Emiralp Sakarya</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg3">🏋️</div><div class="antrenor-body"><h3>Eren Hüseyin Işık</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg4">🏋️</div><div class="antrenor-body"><h3>Eylül Beste Zeren</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg5">🏋️</div><div class="antrenor-body"><h3>Furkan Bilir</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg6">🏋️</div><div class="antrenor-body"><h3>Gözde Sönmez</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg7">🏋️</div><div class="antrenor-body"><h3>Metin Dut</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg1">🏋️</div><div class="antrenor-body"><h3>Nur Seda Ay</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg2">🏋️</div><div class="antrenor-body"><h3>Ömer Ozanalp</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg3">🏋️</div><div class="antrenor-body"><h3>Özge Başar</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg4">🏋️</div><div class="antrenor-body"><h3>Şahika Yurttaş</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+            <div class="antrenor-card reveal"><div class="antrenor-avatar bg5">🏋️</div><div class="antrenor-body"><h3>Taha Yamaner</h3><div class="branch">Antrenör</div><p>DPÜ Spor Kulübü lisanslı antrenörü.</p></div></div>
+        </div>
+        <p style="text-align:center;color:#bbb;font-size:.8rem;margin-top:2rem;">* Her antrenörün branş bilgisi güncellenecektir. Detay için iletişime geçin.</p>
+    </div>
+</section>
+
+<!-- GALERİ -->
+<section id="galeri">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Fotoğraflar</div>
+            <h2 class="sec-title">Gale<span class="accent">ri</span></h2>
+            <div class="sec-line"></div>
+        </div>
+        <div class="galeri-grid">
+            <!-- Yüzme Fotoğrafları -->
+            <div class="gitem reveal"><img src="yuzme1.jpg" alt="DPÜ Yüzme Antrenmanı"><div class="g-overlay">🏊</div></div>
+            <div class="gitem reveal"><img src="yuzme2.jpg" alt="DPÜ Yüzme"><div class="g-overlay">🏊</div></div>
+            <div class="gitem reveal"><img src="yuzme3.jpg" alt="DPÜ Yüzme"><div class="g-overlay">🏊</div></div>
+            <div class="gitem reveal"><img src="yuzme4.jpg" alt="DPÜ Yüzme"><div class="g-overlay">🏊</div></div>
+            <div class="gitem reveal"><img src="yuzme5.jpg" alt="DPÜ Yüzme Sporcuları"><div class="g-overlay">🏊</div></div>
+            <!-- Diğer Branşlar -->
+            <div class="gitem reveal"><div class="gplaceholder" style="background:linear-gradient(135deg,#c8102e,#ff6b35)"><div class="gico">🏀</div><span>Basketbol</span></div><div class="g-overlay">🔍</div></div>
+            <div class="gitem reveal"><div class="gplaceholder" style="background:linear-gradient(135deg,#0d1b3e,#1a3a6e)"><div class="gico">🏐</div><span>Voleybol</span></div><div class="g-overlay">🔍</div></div>
+            <div class="gitem reveal"><div class="gplaceholder" style="background:linear-gradient(135deg,#2e7d32,#66bb6a)"><div class="gico">🎾</div><span>Tenis</span></div><div class="g-overlay">🔍</div></div>
+            <div class="gitem reveal"><div class="gplaceholder" style="background:linear-gradient(135deg,#6a1b9a,#ab47bc)"><div class="gico">🏓</div><span>Masa Tenisi</span></div><div class="g-overlay">🔍</div></div>
+        </div>
+        <div class="ig-cta">
+            <p>Daha fazla fotoğraf ve video için Instagram'ı takip edin!</p>
+            <a href="https://www.instagram.com/dpusporkulubu" target="_blank" class="btn-ig-big">📷 @dpusporkulubu'nu Takip Et</a>
+        </div>
+    </div>
+</section>
+
+<!-- İLETİŞİM -->
+<section id="iletisim">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Bize Ulaşın</div>
+            <h2 class="sec-title">İleti<span class="accent">şim</span></h2>
+            <div class="sec-line"></div>
+        </div>
+        <div class="iletisim-wrap">
+            <div class="iletisim-info reveal">
+                <h3>Bizimle İletişime Geçin</h3>
+                <div class="info-items">
+                    <div class="info-item">
+                        <div class="info-icon">📞</div>
+                        <div>
+                            <h4>Telefon</h4>
+                            <a href="tel:05380738864">0538 073 88 64</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">👤</div>
+                        <div>
+                            <h4>Koordinatör</h4>
+                            <p>Enes Tezyaparlar</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
+                        <div>
+                            <h4>Adres</h4>
+                            <p>Dumlupınar Üniversitesi Spor Bilimleri Fakültesi, Evliya Çelebi Yerleşkesi, Tavşanlı Yolu 10. km, 43100 Kütahya</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📷</div>
+                        <div>
+                            <h4>Instagram</h4>
+                            <a href="https://www.instagram.com/dpusporkulubu" target="_blank">@dpusporkulubu</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sosyal-sec">
+                    <h4>Branş Instagram Hesapları</h4>
+                    <div class="sosyal-list">
+                        <a href="https://www.instagram.com/dpusk.basketbol" target="_blank" class="sosyal-btn">🏀 Basketbol</a>
+                        <a href="https://www.instagram.com/dpuskvoleybol" target="_blank" class="sosyal-btn">🏐 Voleybol</a>
+                        <a href="https://www.instagram.com/dpusk.yuzme" target="_blank" class="sosyal-btn">🏊 Yüzme</a>
+                        <a href="https://www.instagram.com/dpusktenis" target="_blank" class="sosyal-btn">🎾 Tenis</a>
+                        <a href="https://www.instagram.com/dpusk_masatenisi" target="_blank" class="sosyal-btn">🏓 Masa Tenisi</a>
+                        <a href="https://www.instagram.com/dpusk.pilates" target="_blank" class="sosyal-btn">🧘 Pilates</a>
+                        <a href="https://www.instagram.com/dpusk_jimnastik_" target="_blank" class="sosyal-btn">🤸 Jimnastik</a>
+                    </div>
+                </div>
+                <div class="map-wrap">
+                    <div class="map-placeholder">
+                        <div class="map-ico">📍</div>
+                        <p>DPÜ Evliya Çelebi Yerleşkesi<br>Tavşanlı Yolu 10. km, Kütahya</p>
+                        <a href="https://maps.google.com/?q=Dumlupinar+Universitesi+Kutahya" target="_blank">Google Maps'te Aç</a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-box reveal">
+                <h3>📋 Kayıt & Bilgi Formu</h3>
+                <form onsubmit="sendForm(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ad</label>
+                            <input type="text" placeholder="Adınız" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Soyad</label>
+                            <input type="text" placeholder="Soyadınız" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon</label>
+                        <input type="tel" placeholder="0 5XX XXX XX XX" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Yaş / Çocuğun Yaşı</label>
+                        <input type="text" placeholder="Örn: 10">
+                    </div>
+                    <div class="form-group">
+                        <label>İlgilendiğiniz Branş</label>
+                        <select required>
+                            <option value="">Branş seçin...</option>
+                            <option>🏊 Yüzme</option>
+                            <option>🏀 Basketbol</option>
+                            <option>🏐 Voleybol</option>
+                            <option>🎾 Tenis</option>
+                            <option>🏓 Masa Tenisi</option>
+                            <option>🧘 Pilates</option>
+                            <option>💃 Zumba</option>
+                            <option>🤸 Jimnastik</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mesajınız</label>
+                        <textarea placeholder="Soru veya notlarınızı buraya yazabilirsiniz..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-send">Gönder →</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <div class="fb-logo">
+                <div class="fb-circle">DPÜ</div>
+                <div class="fb-name">DPÜ Spor Kulübü<small>DUMLUPINAR ÜNİVERSİTESİ</small></div>
+            </div>
+            <p>Kütahya'nın en çok branşta eğitim veren spor kulübü. DPÜ Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde 8 farklı branşta kaliteli spor eğitimi.</p>
+        </div>
+        <div class="fcol">
+            <h4>Branşlar</h4>
+            <ul>
+                <li><a href="#branslar">🏊 Yüzme</a></li>
+                <li><a href="#branslar">🏀 Basketbol</a></li>
+                <li><a href="#branslar">🏐 Voleybol</a></li>
+                <li><a href="#branslar">🎾 Tenis</a></li>
+                <li><a href="#branslar">🏓 Masa Tenisi</a></li>
+                <li><a href="#branslar">🧘 Pilates</a></li>
+                <li><a href="#branslar">💃 Zumba</a></li>
+                <li><a href="#branslar">🤸 Jimnastik</a></li>
+            </ul>
+        </div>
+        <div class="fcol">
+            <h4>Hızlı Menü</h4>
+            <ul>
+                <li><a href="#hakkimizda">Hakkımızda</a></li>
+                <li><a href="#basarilar">Başarılar</a></li>
+                <li><a href="#duyurular">Duyurular</a></li>
+                <li><a href="#takvim">Antrenman Takvimi</a></li>
+                <li><a href="#antrenorler">Antrenörler</a></li>
+                <li><a href="#galeri">Galeri</a></li>
+                <li><a href="#iletisim">İletişim</a></li>
+            </ul>
+        </div>
+        <div class="fcol">
+            <h4>İletişim</h4>
+            <ul>
+                <li><a href="tel:05380738864">📞 0538 073 88 64</a></li>
+                <li><a href="https://www.instagram.com/dpusporkulubu" target="_blank">📷 @dpusporkulubu</a></li>
+                <li><a href="#">📍 SBF, Evliya Çelebi Yerleşkesi</a></li>
+                <li><a href="#">🏙️ 43100 Kütahya</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 DPÜ Spor Kulübü. Tüm hakları saklıdır.</p>
+        <p>Dumlupınar Üniversitesi <span>♥</span> Kütahya</p>
+    </div>
+</footer>
+
+<!-- FLOATING BUTTONS -->
+<a href="tel:05380738864" id="floatPhone" title="Ara">📞</a>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Yukarı">↑</button>
+
+<script>
+// ── LOADER ──
+window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('hide'), 1800);
+});
+
+// ── SPORT BACKGROUND ANIMATION ──
+(function(){
+    const bg = document.getElementById('sport-bg');
+    // easing: hızlı sporlar cubic-bezier, yavaşlar ease-in-out
+    const sports = [
+        { emoji:'🏊', anim:'swim',     dur:6.5, size:6.5, op:.36, ease:'ease-in-out' },
+        { emoji:'🏊', anim:'swim',     dur:9,   size:4,   op:.26, ease:'ease-in-out' },
+        { emoji:'🏀', anim:'basket',   dur:1.6, size:6,   op:.38, ease:'cubic-bezier(.22,.61,.36,1)' },
+        { emoji:'🏀', anim:'floatBall',dur:4.5, size:3.5, op:.26, ease:'ease-in-out' },
+        { emoji:'🏐', anim:'voley',    dur:2.4, size:6.5, op:.36, ease:'cubic-bezier(.22,.61,.36,1)' },
+        { emoji:'🏐', anim:'floatBall',dur:5.5, size:4,   op:.26, ease:'ease-in-out' },
+        { emoji:'🎾', anim:'tenis',    dur:1.4, size:6,   op:.36, ease:'cubic-bezier(.4,0,.2,1)' },
+        { emoji:'🎾', anim:'floatBall',dur:6.5, size:3.5, op:.24, ease:'ease-in-out' },
+        { emoji:'🏓', anim:'masa',     dur:0.7, size:5.5, op:.34, ease:'cubic-bezier(.4,0,.2,1)' },
+        { emoji:'🏓', anim:'masa',     dur:1,   size:3.5, op:.26, ease:'cubic-bezier(.4,0,.2,1)' },
+        { emoji:'🧘', anim:'pilates',  dur:4.5, size:7,   op:.34, ease:'ease-in-out' },
+        { emoji:'🧘', anim:'pilates',  dur:6.5, size:4,   op:.24, ease:'ease-in-out' },
+        { emoji:'💃', anim:'zumba',    dur:1.1, size:6.5, op:.36, ease:'cubic-bezier(.4,0,.2,1)' },
+        { emoji:'💃', anim:'zumba',    dur:1.7, size:4,   op:.26, ease:'cubic-bezier(.4,0,.2,1)' },
+        { emoji:'⚽', anim:'floatBall',dur:7,   size:3.5, op:.24, ease:'ease-in-out' },
+        { emoji:'🏅', anim:'floatBall',dur:9.5, size:3.5, op:.24, ease:'ease-in-out' },
+        { emoji:'🥊', anim:'tenis',    dur:2,   size:4,   op:.26, ease:'cubic-bezier(.4,0,.2,1)' },
+        { emoji:'🏋️', anim:'basket',   dur:2.2, size:4.5, op:.28, ease:'cubic-bezier(.22,.61,.36,1)' },
+        { emoji:'🤸', anim:'voley',    dur:2.8, size:6,   op:.34, ease:'cubic-bezier(.22,.61,.36,1)' },
+        { emoji:'🤸', anim:'zumba',    dur:1.9, size:3.5, op:.24, ease:'cubic-bezier(.4,0,.2,1)' },
+    ];
+    const positions = [
+        {x:2,  y:8},  {x:87, y:6},  {x:4,  y:76}, {x:84, y:73},
+        {x:17, y:3},  {x:69, y:2},  {x:1,  y:44}, {x:89, y:40},
+        {x:9,  y:58}, {x:79, y:58}, {x:24, y:84}, {x:64, y:87},
+        {x:39, y:4},  {x:50, y:89}, {x:91, y:23}, {x:0,  y:24},
+        {x:74, y:17}, {x:14, y:17},
+    ];
+    sports.forEach((s, i) => {
+        const el = document.createElement('div');
+        el.className = 'sc';
+        el.textContent = s.emoji;
+        const pos = positions[i % positions.length];
+        el.style.cssText = `
+            left:${pos.x}%;
+            top:${pos.y}%;
+            font-size:${s.size}rem;
+            animation:${s.anim} ${s.dur}s ${s.ease} infinite;
+            animation-delay:${(i * 0.65).toFixed(2)}s;
+            opacity:0;
+        `;
+        bg.appendChild(el);
+        setTimeout(() => {
+            el.style.transition = 'opacity 2.2s ease';
+            el.style.opacity = s.op;
+        }, 1800 + i * 150);
+    });
+})();
+
+// ── PARTICLES ──
+(function(){
+    const c = document.getElementById('particles');
+    const colors = ['#f0c040','#06b6d4','#ffffff','#0ea5e9'];
+    for(let i=0;i<40;i++){
+        const p=document.createElement('div');
+        p.className='particle';
+        const size=Math.random()*4+2;
+        p.style.cssText=`
+            left:${Math.random()*100}%;
+            width:${size}px;height:${size}px;
+            background:${colors[Math.floor(Math.random()*colors.length)]};
+            animation-duration:${Math.random()*20+12}s;
+            animation-delay:${Math.random()*15}s;
+        `;
+        c.appendChild(p);
+    }
+})();
+
+// ── COUNTER ANIMATION ──
+function animateCounter(el){
+    const target=+el.dataset.target;
+    const dur=2000;
+    const step=target/dur*16;
+    let cur=0;
+    const tick=()=>{
+        cur=Math.min(cur+step,target);
+        el.textContent=Math.floor(cur).toLocaleString('tr-TR')+(target>100?'':'')+
+            (el.dataset.suffix||'');
+        if(cur<target) requestAnimationFrame(tick);
+        else el.textContent=target.toLocaleString('tr-TR')+(el.dataset.suffix||'');
+    };
+    requestAnimationFrame(tick);
+}
+let counterDone=false;
+const heroObs=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting&&!counterDone){
+        counterDone=true;
+        document.querySelectorAll('.stat-num[data-target]').forEach(animateCounter);
+    }
+},{threshold:.5});
+heroObs.observe(document.getElementById('hero'));
+
+// ── SCROLL REVEAL ──
+const revObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+
+// ── NAVBAR ACTIVE + SCROLL ──
+const sections=document.querySelectorAll('section[id]');
+const navAs=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+    // active link
+    let cur='';
+    sections.forEach(s=>{
+        if(window.scrollY>=s.offsetTop-120) cur=s.id;
+    });
+    navAs.forEach(a=>{
+        a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+    });
+    // back to top
+    document.getElementById('backTop').classList.toggle('show',window.scrollY>500);
+    // nav shadow
+    document.getElementById('nav').classList.toggle('scrolled',window.scrollY>30);
+});
+
+// ── HAMBURGER ──
+function toggleMenu(){
+    document.getElementById('navLinks').classList.toggle('open');
+    document.getElementById('ham').classList.toggle('open');
+}
+document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.addEventListener('click',()=>{
+        document.getElementById('navLinks').classList.remove('open');
+        document.getElementById('ham').classList.remove('open');
+    });
+});
+
+// ── FORM ──
+function sendForm(e){
+    e.preventDefault();
+    const btn=e.target.querySelector('.btn-send');
+    btn.textContent='✓ Gönderildi! En kısa sürede sizi arayacağız.';
+    btn.style.background='#2e7d32';
+    setTimeout(()=>{
+        btn.textContent='Gönder →';
+        btn.style.background='';
+        e.target.reset();
+    },4500);
+}
+</script>
+</body>
+</html>
