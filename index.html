@@ -461,37 +461,31 @@
 
         /* ── ANTRENÖRLER ── */
         #antrenorler{background:var(--light);}
-        .antrenor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.8rem;}
-        .antrenor-card{
-            background:#fff;border-radius:20px;overflow:hidden;
-            box-shadow:0 6px 25px rgba(0,0,0,.08);transition:.35s;text-align:center;
-        }
+        /* Başkan kartı */
+        .antrenor-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 6px 25px rgba(0,0,0,.08);transition:.35s;text-align:center;}
         .antrenor-card:hover{transform:translateY(-8px);box-shadow:0 16px 45px rgba(0,0,0,.14);}
-        .antrenor-avatar{
-            height:180px;display:flex;align-items:center;justify-content:center;
-            font-size:4.5rem;position:relative;
-        }
-        /* Branş renkleri — tutarlı */
-        .antrenor-avatar.bg-yuzme   {background:linear-gradient(135deg,#0066cc,#00c6ff);}
-        .antrenor-avatar.bg-basket  {background:linear-gradient(135deg,#b71c1c,#ff6f00);}
-        .antrenor-avatar.bg-voley   {background:linear-gradient(135deg,#0d1b3e,#1565c0);}
-        .antrenor-avatar.bg-tenis   {background:linear-gradient(135deg,#1b5e20,#43a047);}
-        .antrenor-avatar.bg-masa    {background:linear-gradient(135deg,#4a148c,#9c27b0);}
-        .antrenor-avatar.bg-pilates {background:linear-gradient(135deg,#880e4f,#e91e8c);}
-        .antrenor-avatar.bg-zumba  {background:linear-gradient(135deg,#e91e8c,#ff6b6b);}
-        .antrenor-avatar.bg-jimnas  {background:linear-gradient(135deg,#00695c,#26c6da);}
-        /* Eski fallback */
-        .antrenor-avatar.bg1{background:linear-gradient(135deg,#0066cc,#00a8e8);}
+        .antrenor-avatar{height:180px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;position:relative;}
         .antrenor-avatar.bg2{background:linear-gradient(135deg,#06b6d4,#0ea5e9);}
-        .antrenor-avatar.bg3{background:linear-gradient(135deg,#0d1b3e,#1a3a6e);}
-        .antrenor-avatar.bg4{background:linear-gradient(135deg,#2e7d32,#66bb6a);}
-        .antrenor-avatar.bg5{background:linear-gradient(135deg,#6a1b9a,#ab47bc);}
-        .antrenor-avatar.bg6{background:linear-gradient(135deg,#ad1457,#f48fb1);}
-        .antrenor-avatar.bg7{background:linear-gradient(135deg,#e65100,#ffcc02);}
         .antrenor-body{padding:1.4rem;}
         .antrenor-body h3{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.3rem;}
         .antrenor-body .branch{font-size:.75rem;color:var(--red);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:.5rem;}
         .antrenor-body p{font-size:.8rem;color:var(--muted);line-height:1.6;}
+        /* Branş grupları */
+        .antrenor-brans-wrap{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;}
+        @media(max-width:700px){.antrenor-brans-wrap{grid-template-columns:1fr;}}
+        .antrenor-brans-group{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.07);}
+        .antrenor-brans-header{display:flex;align-items:center;gap:.6rem;padding:.75rem 1.2rem;color:#fff;font-weight:800;font-size:1rem;}
+        .abh-yuzme  {background:linear-gradient(135deg,#0066cc,#00c6ff);}
+        .abh-basket {background:linear-gradient(135deg,#b71c1c,#ff6f00);}
+        .abh-voley  {background:linear-gradient(135deg,#0d1b3e,#1565c0);}
+        .abh-tenis  {background:linear-gradient(135deg,#1b5e20,#43a047);}
+        .abh-jimnas {background:linear-gradient(135deg,#00695c,#26c6da);}
+        .abh-pilates{background:linear-gradient(135deg,#880e4f,#e91e8c);}
+        .antrenor-list{display:flex;flex-direction:column;}
+        .antrenor-row{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.2rem;border-bottom:1px solid #f0f0f0;gap:.5rem;}
+        .antrenor-row:last-child{border-bottom:none;}
+        .antrenor-row-name{font-size:.9rem;font-weight:700;color:var(--navy);}
+        .antrenor-row-role{font-size:.72rem;color:var(--red);font-weight:600;text-align:right;white-space:nowrap;}
 
         /* ── GALERİ ── */
         /* ── YORUMLAR ── */
@@ -1421,27 +1415,74 @@
             </div>
         </div>
 
-        <!-- ANTRENÖRLER (Alfabetik) -->
-        <div class="antrenor-grid">
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-basket">🏀</div><div class="antrenor-body"><h3>Ahmet Hamdi Bayraktar</h3><div class="branch">🏀 Basketbol Baş Antrenörü</div><p>DPÜ Spor Kulübü basketbol branşı baş antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-jimnas">🤸</div><div class="antrenor-body"><h3>Beyzagül Akgün</h3><div class="branch">🤸 Jimnastik Antrenörü</div><p>DPÜ Spor Kulübü jimnastik branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-basket">🏀</div><div class="antrenor-body"><h3>Boğaçhan Yıldırım</h3><div class="branch">🏀 Basketbol Antrenörü</div><p>DPÜ Spor Kulübü basketbol branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-jimnas">🤸</div><div class="antrenor-body"><h3>Cerem Karsak</h3><div class="branch">🤸 Jimnastik Antrenörü</div><p>DPÜ Spor Kulübü jimnastik branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-jimnas">🤸</div><div class="antrenor-body"><h3>Ceren Bal</h3><div class="branch">🤸 Jimnastik Antrenörü</div><p>DPÜ Spor Kulübü jimnastik branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-tenis">🎾</div><div class="antrenor-body"><h3>Çağatay Ayyıldız</h3><div class="branch">🎾 Tenis Antrenörü</div><p>DPÜ Spor Kulübü tenis branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-tenis">🎾</div><div class="antrenor-body"><h3>Doğukan Bilici</h3><div class="branch">🎾 Tenis · 🏐 Voleybol Antrenörü</div><p>DPÜ Spor Kulübü tenis ve voleybol branşları antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-yuzme">🏊</div><div class="antrenor-body"><h3>Enes Tezyaparlar</h3><div class="branch">🏊 Yüzme Antrenörü</div><p>DPÜ Spor Kulübü yüzme branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-yuzme">🏊</div><div class="antrenor-body"><h3>Eren Hüseyin Işık</h3><div class="branch">🏊 Yüzme Antrenörü</div><p>DPÜ Spor Kulübü yüzme branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-voley">🏐</div><div class="antrenor-body"><h3>Eylül Beste Zeren</h3><div class="branch">🏐 Voleybol · 🎾 Tenis · 🧘 Pilates Antrenörü</div><p>DPÜ Spor Kulübü voleybol, tenis ve pilates branşları antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-tenis">🎾</div><div class="antrenor-body"><h3>Furkan Bilir</h3><div class="branch">🎾 Tenis Antrenörü</div><p>DPÜ Spor Kulübü tenis branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-yuzme">🏊</div><div class="antrenor-body"><h3>Gizem Yerlikaya</h3><div class="branch">🏊 Yüzme · 🏐 Voleybol Baş Antrenörü</div><p>DPÜ Spor Kulübü yüzme ve voleybol branşları baş antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-yuzme">🏊</div><div class="antrenor-body"><h3>Gözde Sönmez</h3><div class="branch">🏊 Yüzme Antrenörü</div><p>DPÜ Spor Kulübü yüzme branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-tenis">🎾</div><div class="antrenor-body"><h3>Metin Dut</h3><div class="branch">🎾 Tenis Baş Antrenörü</div><p>DPÜ Spor Kulübü tenis branşı baş antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-pilates">🧘</div><div class="antrenor-body"><h3>Nur Seda Ay</h3><div class="branch">🧘 Pilates Antrenörü</div><p>DPÜ Spor Kulübü pilates branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-jimnas">🤸</div><div class="antrenor-body"><h3>Ömer Ozanalp</h3><div class="branch">🤸 Jimnastik Baş Antrenörü</div><p>DPÜ Spor Kulübü jimnastik branşı baş antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-pilates">🧘</div><div class="antrenor-body"><h3>Özge Başar</h3><div class="branch">🧘 Pilates Antrenörü</div><p>DPÜ Spor Kulübü pilates branşı antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-pilates">🧘</div><div class="antrenor-body"><h3>Şahika Yurttaş</h3><div class="branch">🧘 Pilates · 🏓 Masa Tenisi · 💃 Zumba Baş Antrenörü</div><p>DPÜ Spor Kulübü pilates, masa tenisi ve zumba branşları baş antrenörü.</p></div></div>
-            <div class="antrenor-card reveal"><div class="antrenor-avatar bg-yuzme">🏊</div><div class="antrenor-body"><h3>Taha Yamaner</h3><div class="branch">🏊 Yüzme Antrenörü</div><p>DPÜ Spor Kulübü yüzme branşı antrenörü.</p></div></div>
+        <!-- ANTRENÖRLER — Branş Branş -->
+        <div class="antrenor-brans-wrap">
+
+            <!-- YÜZME -->
+            <div class="antrenor-brans-group reveal">
+                <div class="antrenor-brans-header abh-yuzme">🏊 Yüzme</div>
+                <div class="antrenor-list">
+                    <div class="antrenor-row"><span class="antrenor-row-name">Gizem Yerlikaya</span><span class="antrenor-row-role">Baş Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Enes Tezyaparlar</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Eren Hüseyin Işık</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Gözde Sönmez</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Taha Yamaner</span><span class="antrenor-row-role">Antrenör</span></div>
+                </div>
+            </div>
+
+            <!-- BASKETBOL -->
+            <div class="antrenor-brans-group reveal">
+                <div class="antrenor-brans-header abh-basket">🏀 Basketbol</div>
+                <div class="antrenor-list">
+                    <div class="antrenor-row"><span class="antrenor-row-name">Ahmet Hamdi Bayraktar</span><span class="antrenor-row-role">Baş Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Boğaçhan Yıldırım</span><span class="antrenor-row-role">Antrenör</span></div>
+                </div>
+            </div>
+
+            <!-- VOLEYBOL -->
+            <div class="antrenor-brans-group reveal">
+                <div class="antrenor-brans-header abh-voley">🏐 Voleybol</div>
+                <div class="antrenor-list">
+                    <div class="antrenor-row"><span class="antrenor-row-name">Gizem Yerlikaya</span><span class="antrenor-row-role">Baş Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Eylül Beste Zeren</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Doğukan Bilici</span><span class="antrenor-row-role">Antrenör</span></div>
+                </div>
+            </div>
+
+            <!-- TENİS -->
+            <div class="antrenor-brans-group reveal">
+                <div class="antrenor-brans-header abh-tenis">🎾 Tenis</div>
+                <div class="antrenor-list">
+                    <div class="antrenor-row"><span class="antrenor-row-name">Metin Dut</span><span class="antrenor-row-role">Baş Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Çağatay Ayyıldız</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Doğukan Bilici</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Eylül Beste Zeren</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Furkan Bilir</span><span class="antrenor-row-role">Antrenör</span></div>
+                </div>
+            </div>
+
+            <!-- JİMNASTİK -->
+            <div class="antrenor-brans-group reveal">
+                <div class="antrenor-brans-header abh-jimnas">🤸 Jimnastik</div>
+                <div class="antrenor-list">
+                    <div class="antrenor-row"><span class="antrenor-row-name">Ömer Ozanalp</span><span class="antrenor-row-role">Baş Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Beyzagül Akgün</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Cerem Karsak</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Ceren Bal</span><span class="antrenor-row-role">Antrenör</span></div>
+                </div>
+            </div>
+
+            <!-- PİLATES / ZUMBA / MASA TENİSİ -->
+            <div class="antrenor-brans-group reveal">
+                <div class="antrenor-brans-header abh-pilates">🧘 Pilates &nbsp;·&nbsp; 💃 Zumba &nbsp;·&nbsp; 🏓 Masa Tenisi</div>
+                <div class="antrenor-list">
+                    <div class="antrenor-row"><span class="antrenor-row-name">Şahika Yurttaş</span><span class="antrenor-row-role">Baş Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Nur Seda Ay</span><span class="antrenor-row-role">Pilates Antrenörü</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Özge Başar</span><span class="antrenor-row-role">Pilates Antrenörü</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Eylül Beste Zeren</span><span class="antrenor-row-role">Pilates Antrenörü</span></div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
