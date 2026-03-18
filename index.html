@@ -348,19 +348,20 @@
         .about-right h2{font-size:1.9rem;font-weight:900;color:var(--navy);margin-bottom:1.2rem;line-height:1.2;}
         .about-right h2 .accent{color:var(--red);}
         .about-right p{color:var(--muted);line-height:1.85;font-size:.92rem;margin-bottom:.9rem;}
-        /* Tarihçe Timeline – kompakt */
-        .tarihce{margin-top:2.5rem;}
-        .tarihce-title{text-align:center;font-size:1.25rem;font-weight:900;color:var(--navy);margin-bottom:.3rem;}
+        /* Tarihçe Timeline – mini strip */
+        .tarihce{margin-top:1.8rem;}
+        .tarihce-title{text-align:center;font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:.2rem;}
         .tarihce-title .accent{color:var(--primary);}
-        .tarihce-line-wrap{display:flex;flex-direction:row;flex-wrap:wrap;gap:.6rem;margin-top:1.5rem;justify-content:center;}
+        .tarihce-line-wrap{display:flex;flex-direction:row;flex-wrap:nowrap;gap:0;margin-top:1rem;justify-content:center;overflow-x:auto;padding-bottom:.3rem;}
         .tarihce-line-wrap::before{display:none;}
-        .t-item{display:flex;flex-direction:column;align-items:center;gap:.4rem;position:relative;flex:1;min-width:130px;max-width:180px;}
+        .t-item{display:flex;flex-direction:column;align-items:center;gap:.25rem;position:relative;flex:1;min-width:90px;max-width:130px;padding:.4rem .3rem;border-right:1px solid #e0e0e0;}
+        .t-item:last-child{border-right:none;}
         .t-item:nth-child(odd),.t-item:nth-child(even){flex-direction:column;}
         .t-item:nth-child(odd) .t-box,.t-item:nth-child(even) .t-box{text-align:center;margin:0;}
-        .t-dot{position:static;transform:none;width:12px;height:12px;background:var(--primary);border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 2px var(--primary);}
-        .t-year{font-size:1rem;font-weight:900;color:var(--primary);line-height:1;}
-        .t-desc{font-size:.75rem;color:var(--muted);line-height:1.5;margin-top:.2rem;}
-        .t-box{max-width:160px;}
+        .t-dot{position:static;transform:none;width:8px;height:8px;background:var(--primary);border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 2px var(--primary);}
+        .t-year{font-size:.85rem;font-weight:900;color:var(--primary);line-height:1;}
+        .t-desc{font-size:.65rem;color:var(--muted);line-height:1.4;margin-top:.1rem;}
+        .t-box{max-width:120px;}
         /* Vizyon Misyon */
         .vizyon-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:1.5rem;}
         .vm-card{background:#fff;border-radius:14px;padding:1.3rem 1.5rem;box-shadow:0 4px 24px rgba(0,0,0,.07);border-top:4px solid var(--primary);position:relative;overflow:hidden;}
@@ -381,7 +382,9 @@
 
         /* ── BRANŞLAR ── */
         #branslar{background:#fff;}
-        .brans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1.8rem;}
+        .brans-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+        @media(max-width:1100px){.brans-grid{grid-template-columns:repeat(2,1fr);}}
+        @media(max-width:600px){.brans-grid{grid-template-columns:1fr;}}
         .brans-card{
             border-radius:20px;overflow:hidden;background:#fff;
             box-shadow:0 6px 25px rgba(0,0,0,.08);transition:.4s ease;
@@ -1123,7 +1126,7 @@
         </div>
         <div class="tesis-brans-grid">
             <div class="tesis-brans-card reveal" onclick="openTesis('yuzme')">
-                <img src="tesis-havuz.jpg" alt="Yüzme" loading="lazy">
+                <img src="yuzme1.jpg" alt="Yüzme" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">🏊</div>
                     <div class="tesis-brans-name">Yüzme</div>
@@ -1131,7 +1134,7 @@
                 </div>
             </div>
             <div class="tesis-brans-card reveal" onclick="openTesis('basketbol')">
-                <img src="tesis-basketbol-buyuk.jpg" alt="Basketbol" loading="lazy">
+                <img src="basketbol1.jpg" alt="Basketbol" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">🏀</div>
                     <div class="tesis-brans-name">Basketbol</div>
@@ -1139,7 +1142,7 @@
                 </div>
             </div>
             <div class="tesis-brans-card reveal" onclick="openTesis('voleybol')">
-                <img src="tesis-basketbol.jpg" alt="Voleybol" loading="lazy">
+                <img src="basketbol3.jpg" alt="Voleybol" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">🏐</div>
                     <div class="tesis-brans-name">Voleybol</div>
@@ -1147,7 +1150,7 @@
                 </div>
             </div>
             <div class="tesis-brans-card reveal" onclick="openTesis('tenis')">
-                <img src="tesis-kapali-tenis.jpg" alt="Tenis" loading="lazy">
+                <img src="tenis-kapali.jpg" alt="Tenis" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">🎾</div>
                     <div class="tesis-brans-name">Tenis</div>
@@ -1155,7 +1158,7 @@
                 </div>
             </div>
             <div class="tesis-brans-card reveal" onclick="openTesis('pilates')">
-                <img src="tesis-pilates.jpg" alt="Pilates" loading="lazy">
+                <img src="pilates.jpg" alt="Pilates" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">🧘</div>
                     <div class="tesis-brans-name">Pilates</div>
@@ -1163,7 +1166,7 @@
                 </div>
             </div>
             <div class="tesis-brans-card reveal" onclick="openTesis('zumba')">
-                <img src="tesis-dans.jpg" alt="Zumba" loading="lazy">
+                <img src="zumba.jpg" alt="Zumba" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">💃</div>
                     <div class="tesis-brans-name">Zumba</div>
@@ -1171,7 +1174,7 @@
                 </div>
             </div>
             <div class="tesis-brans-card reveal" onclick="openTesis('jimnastik')">
-                <img src="tesis-jimnastik.jpg" alt="Jimnastik" loading="lazy">
+                <img src="jimnastik.jpg" alt="Jimnastik" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">🤸</div>
                     <div class="tesis-brans-name">Jimnastik</div>
@@ -1179,7 +1182,7 @@
                 </div>
             </div>
             <div class="tesis-brans-card reveal" onclick="openTesis('masatenisi')">
-                <img src="tesis-basketbol-kucuk.jpg" alt="Masa Tenisi" loading="lazy">
+                <img src="basketbol2.jpg" alt="Masa Tenisi" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">🏓</div>
                     <div class="tesis-brans-name">Masa Tenisi</div>
@@ -1966,14 +1969,14 @@ document.querySelectorAll('.nav-links a').forEach(a=>{
 
 // ── TESİS SLIDER ──
 const tesisData = {
-    yuzme:      [{src:'tesis-havuz.jpg', cap:'Olimpik Yüzme Havuzu'}, {src:'tesis-havuz-buyuk.jpg', cap:'Yüzme Havuzu – Tribün'}],
-    basketbol:  [{src:'tesis-basketbol-buyuk.jpg', cap:'Ana Spor Salonu – Tribün'}, {src:'tesis-basketbol.jpg', cap:'Basketbol Salonu'}],
-    voleybol:   [{src:'tesis-basketbol-buyuk.jpg', cap:'Voleybol Salonu – Ana Spor Merkezi'}, {src:'tesis-basketbol.jpg', cap:'Çok Amaçlı Salon'}],
-    tenis:      [{src:'tesis-kapali-tenis.jpg', cap:'Kapalı Tenis Kortları'}, {src:'tesis-acik-tenis.jpg', cap:'Açık Tenis Kortları'}],
-    pilates:    [{src:'tesis-pilates.jpg', cap:'Pilates Stüdyosu'}],
-    zumba:      [{src:'tesis-dans.jpg', cap:'Zumba Salonu'}],
-    jimnastik:  [{src:'tesis-jimnastik.jpg', cap:'Jimnastik Salonu'}, {src:'tesis-trambolin.jpg', cap:'Trambolin Salonu'}],
-    masatenisi: [{src:'tesis-basketbol-kucuk.jpg', cap:'Masa Tenisi Salonu'}],
+    yuzme:      [{src:'yuzme1.jpg', cap:'Olimpik Yüzme Havuzu'}],
+    basketbol:  [{src:'basketbol1.jpg', cap:'Basketbol Salonu'}, {src:'basketbol2.jpg', cap:'Basketbol Salonu – Yakın'}, {src:'basketbol3.jpg', cap:'Ana Spor Salonu'}],
+    voleybol:   [{src:'basketbol3.jpg', cap:'Voleybol – Ana Spor Salonu'}, {src:'basketbol1.jpg', cap:'Voleybol – Salon İçi'}],
+    tenis:      [{src:'tenis-kapali.jpg', cap:'Kapalı Tenis Kortları'}, {src:'tenis-acik.jpg', cap:'Açık Tenis Kortları'}],
+    pilates:    [{src:'pilates.jpg', cap:'Pilates Reformer Stüdyosu'}],
+    zumba:      [{src:'zumba.jpg', cap:'Zumba Salonu'}],
+    jimnastik:  [{src:'jimnastik.jpg', cap:'Jimnastik Salonu'}, {src:'trambolin.jpg', cap:'Trambolin Salonu'}],
+    masatenisi: [{src:'basketbol2.jpg', cap:'Masa Tenisi – Spor Salonu'}],
 };
 let tsItems=[], tsIdx=0;
 function openTesis(brans){
