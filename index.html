@@ -273,13 +273,13 @@
         .badge-dot{width:6px;height:6px;background:var(--red);border-radius:50%;animation:blink 1.5s infinite;}
         @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
         .hero-logo{
-            width:130px;height:130px;background:var(--red);border-radius:50%;
+            width:140px;height:140px;
             display:flex;align-items:center;justify-content:center;
-            font-size:2.2rem;font-weight:900;color:#fff;
-            border:4px solid var(--gold);margin:0 auto 2rem;
-            box-shadow:0 0 60px rgba(6,182,212,.5);
+            margin:0 auto 2rem;
             animation:heroGlow 3s ease-in-out infinite;
+            filter:drop-shadow(0 0 30px rgba(6,182,212,.6));
         }
+        .hero-logo img{width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;}
         @keyframes heroGlow{0%,100%{box-shadow:0 0 60px rgba(6,182,212,.5);}50%{box-shadow:0 0 100px rgba(6,182,212,.8),0 0 160px rgba(6,182,212,.3);}}
         .hero-title{
             font-size:clamp(2rem,5.5vw,4rem);font-weight:900;color:#fff;
@@ -802,7 +802,7 @@
             <span class="badge-dot"></span>
             Kütahya'nın Lider Spor Kulübü
         </div>
-        <div class="hero-logo">DPÜ</div>
+        <div class="hero-logo"><img src="amblem.png" alt="DPÜ Spor Kulübü Amblemi"></div>
         <h1 class="hero-title">Dumlupınar Üniversitesi<br><span class="accent">Spor Kulübü</span></h1>
         <p class="hero-slogan">"Kütahya'nın en çok branşta eğitim veren spor kulübü"</p>
         <div class="hero-stats">
