@@ -373,6 +373,14 @@
         .feat-list li:last-child{border-bottom:none;}
         .feat-check{width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;flex-shrink:0;margin-top:1px;}
 
+        /* ── KAYAN BANT ── */
+        .ticker-wrap{background:var(--navy);padding:.7rem 0;overflow:hidden;border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);}
+        .ticker-track{display:flex;gap:0;white-space:nowrap;animation:tickerScroll 30s linear infinite;}
+        .ticker-track:hover{animation-play-state:paused;}
+        @keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+        .ticker-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 2.5rem;color:rgba(255,255,255,.9);font-size:.82rem;font-weight:600;letter-spacing:.5px;}
+        .ticker-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0;}
+
         /* ── BRANŞLAR ── */
         #branslar{background:#fff;}
         .brans-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
@@ -388,7 +396,7 @@
             justify-content:center;position:relative;overflow:hidden;
         }
         .brans-top::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.35);transition:.4s;}
-        .brans-card:hover .brans-top::before{background:rgba(0,0,0,.55);}
+        .brans-card:hover .brans-top::before{background:rgba(0,0,0,.75);}
         .brans-top .bicon{font-size:3.8rem;position:relative;z-index:1;transition:.4s;filter:drop-shadow(0 4px 10px rgba(0,0,0,.4));}
         .brans-card:hover .bicon{transform:scale(1.2) rotate(-5deg);}
         .brans-top .bname{position:relative;z-index:1;color:#fff;font-size:1.25rem;font-weight:800;text-shadow:0 2px 10px rgba(0,0,0,.5);margin-top:.4rem;letter-spacing:.5px;text-transform:uppercase;}
@@ -792,11 +800,11 @@
     <div class="hero-content">
         <div class="hero-badge">
             <span class="badge-dot"></span>
-            Kütahya'nın Lider Spor Kulübü
+            Kütahya'nın En Büyük Spor Kulübü
         </div>
         <div class="hero-logo"><img src="logo.svg" alt="DPÜ Spor Kulübü Amblemi"></div>
         <h1 class="hero-title">Dumlupınar Üniversitesi<br><span class="accent">Spor Kulübü</span></h1>
-        <p class="hero-slogan">"Kütahya'nın en çok branşta eğitim veren spor kulübü"</p>
+        <p class="hero-slogan">Uygun fiyatlı, kaliteli ve bilimsel spor eğitimi — Kütahya'nın en köklü kulübü</p>
         <div class="hero-stats">
             <div class="stat-item">
                 <span class="stat-num" data-target="8">0</span>
@@ -805,6 +813,10 @@
             <div class="stat-item">
                 <span class="stat-num" data-target="1000" data-suffix="+">0</span>
                 <span class="stat-lbl">Sporcu</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num" data-target="20" data-suffix="+">0</span>
+                <span class="stat-lbl">Antrenör</span>
             </div>
             <div class="stat-item">
                 <span class="stat-num" data-target="30">0</span>
@@ -933,6 +945,25 @@
     </div>
 </section>
 
+<!-- KAYAN BANT -->
+<div class="ticker-wrap">
+    <div class="ticker-track">
+        <span class="ticker-item"><span class="ticker-dot"></span>🎉 23 Nisan Bayram Etkinliği – 23 Nisan Çarşamba</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>🏊 Yüzme – Yeni Başlangıç Grubu Açıldı</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>📋 2025 Bahar Dönemi Kayıtları Devam Ediyor</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>🏀 Basketbol – Haftalık Antrenmanlar Cuma &amp; Hafta Sonu</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>🧘 Pilates Reformer Sınıfları – Kontenjan Dolmadan Kayıt Ol!</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>📞 Bilgi için: 0538 073 88 64</span>
+        <!-- tekrar (kesintisiz döngü için) -->
+        <span class="ticker-item"><span class="ticker-dot"></span>🎉 23 Nisan Bayram Etkinliği – 23 Nisan Çarşamba</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>🏊 Yüzme – Yeni Başlangıç Grubu Açıldı</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>📋 2025 Bahar Dönemi Kayıtları Devam Ediyor</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>🏀 Basketbol – Haftalık Antrenmanlar Cuma &amp; Hafta Sonu</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>🧘 Pilates Reformer Sınıfları – Kontenjan Dolmadan Kayıt Ol!</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>📞 Bilgi için: 0538 073 88 64</span>
+    </div>
+</div>
+
 <!-- BRANŞLAR -->
 <section id="branslar">
     <div class="container">
@@ -1016,7 +1047,7 @@
             </div>
             <!-- Pilates -->
             <div class="brans-card b-pilates reveal">
-                <div class="brans-top"><img src="brans-pilates.jpg" alt="Pilates" loading="lazy"><div class="bicon">🧘</div><div class="bname">Pilates</div></div>
+                <div class="brans-top"><img src="brans-pilates.jpg" alt="Pilates" loading="lazy" style="object-position:center top;"><div class="bicon">🧘</div><div class="bname">Pilates</div></div>
                 <div class="brans-body">
                     <p>Reformer ve mat pilates programlarıyla vücudunu güçlendir, esnekliğini artır. Postür düzeltme ve core güçlendirme odaklı profesyonel eğitim.</p>
                     <div class="brans-info">
@@ -1173,6 +1204,61 @@
     </div>
 </section>
 
+<!-- DUYURULAR -->
+<section id="duyurular">
+    <div class="container">
+        <div class="sec-head">
+            <div class="sec-tag">Haberler</div>
+            <h2 class="sec-title">Duyuru<span class="accent">lar</span></h2>
+            <div class="sec-line"></div>
+        </div>
+        <div class="duyuru-grid">
+            <div class="duyuru-card reveal" style="border-left-color:#e63946;">
+                <div class="duyuru-date" style="color:#e63946;">Nisan 2026</div>
+                <h3>🎉 23 Nisan Ulusal Egemenlik ve Çocuk Bayramı</h3>
+                <p>23 Nisan Ulusal Egemenlik ve Çocuk Bayramı kutlamaları kapsamında kulübümüz özel etkinlikler düzenleyecektir. Tüm sporcularımız ve aileleri davetlidir.</p>
+                <span class="duyuru-tag" style="background:#e63946;">23 Nisan</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Mart 2025</div>
+                <h3>2025 Bahar Dönemi Kayıtları Başladı!</h3>
+                <p>Tüm branşlarımızda bahar dönemi kayıtları başlamıştır. Sınırlı kontenjanlar için hemen iletişime geçin.</p>
+                <span class="duyuru-tag">Tüm Branşlar</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Şubat 2025</div>
+                <h3>Yüzme Kursu – Yeni Grup Açıldı</h3>
+                <p>Yüzme branşımızda yeni başlangıç grubu açılmıştır. 6 yaş ve üzeri tüm bireyler başvurabilir.</p>
+                <span class="duyuru-tag">Yüzme</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Ocak 2025</div>
+                <h3>Pilates Reformer Sınıfları Başlıyor</h3>
+                <p>Modern Reformer cihazlarıyla pilates eğitimlerimiz başlıyor. Vücut farkındalığı ve güçlendirme programı.</p>
+                <span class="duyuru-tag">Pilates</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Aralık 2024</div>
+                <h3>Basketbol – Kütahya Gençlik Turnuvası</h3>
+                <p>Basketbol takımımız Kütahya Gençlik ve Spor İl Müdürlüğü organizasyonunda mücadele etti.</p>
+                <span class="duyuru-tag">Basketbol</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Kasım 2024</div>
+                <h3>Stajyer Antrenör Başvuruları Açıldı</h3>
+                <p>DPÜ SBF akademisyenleri gözetiminde görev almak isteyen stajyer antrenörler için başvurular açıktır.</p>
+                <span class="duyuru-tag">Tüm Branşlar</span>
+            </div>
+            <div class="duyuru-card reveal">
+                <div class="duyuru-date">Ekim 2024</div>
+                <h3>Zumba Dersleri Yeni Dönemde de Devam Ediyor</h3>
+                <p>Popüler Zumba derslerimiz yeni dönemde de devam ediyor. Latin müzik eşliğinde eğlenceli antrenmanlar.</p>
+                <span class="duyuru-tag">Zumba</span>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- BAŞARILAR -->
 <section id="basarilar">
     <div class="container">
@@ -1217,55 +1303,6 @@
                 <h3>4.000+ Takipçi</h3>
                 <p>Instagram'da 4.370 takipçiye ulaşarak Kütahya'nın en çok takip edilen spor kulübü.</p>
                 <span class="byear">2025</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- DUYURULAR -->
-<section id="duyurular">
-    <div class="container">
-        <div class="sec-head">
-            <div class="sec-tag">Haberler</div>
-            <h2 class="sec-title">Duyuru<span class="accent">lar</span></h2>
-            <div class="sec-line"></div>
-        </div>
-        <div class="duyuru-grid">
-            <div class="duyuru-card reveal">
-                <div class="duyuru-date">Mart 2025</div>
-                <h3>2025 Bahar Dönemi Kayıtları Başladı!</h3>
-                <p>Tüm branşlarımızda bahar dönemi kayıtları başlamıştır. Sınırlı kontenjanlar için hemen iletişime geçin.</p>
-                <span class="duyuru-tag">Tüm Branşlar</span>
-            </div>
-            <div class="duyuru-card reveal">
-                <div class="duyuru-date">Şubat 2025</div>
-                <h3>Yüzme Kursu – Yeni Grup Açıldı</h3>
-                <p>Yüzme branşımızda yeni başlangıç grubu açılmıştır. 6 yaş ve üzeri tüm bireyler başvurabilir.</p>
-                <span class="duyuru-tag">Yüzme</span>
-            </div>
-            <div class="duyuru-card reveal">
-                <div class="duyuru-date">Ocak 2025</div>
-                <h3>Pilates Reformer Sınıfları Başlıyor</h3>
-                <p>Modern Reformer cihazlarıyla pilates eğitimlerimiz başlıyor. Vücut farkındalığı ve güçlendirme programı.</p>
-                <span class="duyuru-tag">Pilates</span>
-            </div>
-            <div class="duyuru-card reveal">
-                <div class="duyuru-date">Aralık 2024</div>
-                <h3>Basketbol – Kütahya Gençlik Turnuvası</h3>
-                <p>Basketbol takımımız Kütahya Gençlik ve Spor İl Müdürlüğü organizasyonunda mücadele etti.</p>
-                <span class="duyuru-tag">Basketbol</span>
-            </div>
-            <div class="duyuru-card reveal">
-                <div class="duyuru-date">Kasım 2024</div>
-                <h3>Stajyer Antrenör Başvuruları Açıldı</h3>
-                <p>DPÜ SBF akademisyenleri gözetiminde görev almak isteyen stajyer antrenörler için başvurular açıktır.</p>
-                <span class="duyuru-tag">Tüm Branşlar</span>
-            </div>
-            <div class="duyuru-card reveal">
-                <div class="duyuru-date">Ekim 2024</div>
-                <h3>Zumba Dersleri Yeni Dönemde de Devam Ediyor</h3>
-                <p>Popüler Zumba derslerimiz yeni dönemde de devam ediyor. Latin müzik eşliğinde eğlenceli antrenmanlar.</p>
-                <span class="duyuru-tag">Zumba</span>
             </div>
         </div>
     </div>
@@ -1505,8 +1542,7 @@
         </div>
         <!-- FİLTRE -->
         <div style="display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:2rem;">
-            <button class="galeri-filter active" onclick="filterGaleri('tumu',this)">Tümü</button>
-            <button class="galeri-filter" onclick="filterGaleri('yuzme',this)">🏊 Yüzme</button>
+            <button class="galeri-filter active" onclick="filterGaleri('yuzme',this)">🏊 Yüzme</button>
             <button class="galeri-filter" onclick="filterGaleri('basketbol',this)">🏀 Basketbol</button>
             <button class="galeri-filter" onclick="filterGaleri('voleybol',this)">🏐 Voleybol</button>
             <button class="galeri-filter" onclick="filterGaleri('tenis',this)">🎾 Tenis</button>
@@ -1568,13 +1604,6 @@
                     <span class="sss-icon">+</span>
                 </div>
                 <div class="sss-a">Tüm antrenmanlar Dumlupınar Üniversitesi Evliya Çelebi Yerleşkesi'nde yer alan tesislerde gerçekleştirilmektedir. Yüzme için olimpik havuz, diğer branşlar için çok amaçlı spor salonu ve özel stüdyolar kullanılmaktadır.</div>
-            </div>
-            <div class="sss-item reveal">
-                <div class="sss-q" onclick="toggleSss(this)">
-                    <span>Ücretler ne kadar?</span>
-                    <span class="sss-icon">+</span>
-                </div>
-                <div class="sss-a">Ücretler branşa ve programa göre farklılık göstermektedir. Güncel ücret tarifesi ve kampanyalar için 0538 073 88 64 numaralı hattı arayarak bilgi alabilirsiniz.</div>
             </div>
             <div class="sss-item reveal">
                 <div class="sss-q" onclick="toggleSss(this)">
@@ -1728,8 +1757,9 @@
                         <a href="https://www.instagram.com/dpusk_jimnastik_" target="_blank" class="sosyal-btn">🤸 Jimnastik</a>
                     </div>
                 </div>
-                <div class="map-wrap">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3101.3!2d29.9285!3d39.4197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14c9a7b2f6e0e0e1%3A0x1234567890abcdef!2sDumlup%C4%B1nar%20%C3%9Cniversitesi%20Spor%20Bilimleri%20Fak%C3%BCltesi!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="DPÜ Konum"></iframe>
+                <div class="map-wrap" style="position:relative;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3101.845!2d29.925!3d39.418!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca1df5c0917c0b%3A0x9e08a1a1b1b1b1b1!2sDumlup%C4%B1nar%20%C3%9Cniversitesi%20Spor%20Bilimleri%20Fak%C3%BCltesi!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="DPÜ Konum"></iframe>
+                    <a href="https://maps.google.com/?q=Dumlupınar+Üniversitesi+Spor+Bilimleri+Fakültesi+Kütahya" target="_blank" style="display:block;text-align:center;margin-top:.7rem;background:var(--navy);color:#fff;padding:.6rem 1.2rem;border-radius:10px;font-size:.82rem;font-weight:700;text-decoration:none;transition:.2s;" onmouseover="this.style.background='var(--red)'" onmouseout="this.style.background='var(--navy)'">📍 Google Maps'te Aç</a>
                 </div>
             </div>
             <div class="form-box reveal">
@@ -1974,13 +2004,19 @@ function filterGaleri(brans, btn){
   document.querySelectorAll('.galeri-filter').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('#galeriGrid .gitem').forEach(item=>{
-    if(brans==='tumu'||item.dataset.brans===brans){
+    if(item.dataset.brans===brans){
       item.classList.remove('hidden');
     } else {
       item.classList.add('hidden');
     }
   });
 }
+// Galeri başlangıçta yüzme filtresi aktif
+window.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('#galeriGrid .gitem').forEach(item=>{
+    if(item.dataset.brans!=='yuzme') item.classList.add('hidden');
+  });
+});
 function toggleSss(el){
   const isOpen = el.classList.contains('open');
   document.querySelectorAll('.sss-q').forEach(q=>{
