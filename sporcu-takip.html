@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DPÜ Spor Kulübü - Sporcu Takip</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0f1e;--sidebar:#0d1628;--card:#111827;--card2:#1a2236;
+  --border:#1e2d4a;--primary:#2563eb;--accent:#f0c040;--cyan:#06d6f0;
+  --text:#e2e8f0;--muted:#64748b;--success:#10b981;--danger:#ef4444;
+  --warning:#f59e0b;--radius:10px;--trans:.2s ease;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;display:flex;min-height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+#sidebar{width:220px;min-width:220px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;left:0;top:0;height:100vh;z-index:100;transition:transform var(--trans)}
+.sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0}
+.logo-text{font-size:13px;font-weight:700;color:var(--accent);line-height:1.2}
+.logo-sub{font-size:10px;color:var(--muted);line-height:1.2}
+.sidebar-nav{flex:1;overflow-y:auto;padding:8px 0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:background var(--trans);border-left:3px solid transparent;font-size:13px;color:var(--muted);position:relative;user-select:none}
+.nav-item:hover{background:rgba(37,99,235,.1);color:var(--text)}
+.nav-item.active{background:rgba(37,99,235,.15);color:var(--accent);border-left-color:var(--accent)}
+.nav-item .nav-icon{font-size:16px;width:20px;text-align:center}
+.nav-dot{width:7px;height:7px;background:var(--danger);border-radius:50%;position:absolute;right:12px;top:50%;transform:translateY(-50%)}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center}
+
+/* MAIN */
+#main{margin-left:220px;flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+#topbar{background:var(--sidebar);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+#topbar-title{font-size:18px;font-weight:700;color:var(--text)}
+#topbar-sub{font-size:12px;color:var(--muted);margin-top:2px}
+#topbar-actions{display:flex;gap:8px;align-items:center}
+#hamburger{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px}
+#page-content{flex:1;overflow-y:auto;padding:24px}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;transition:all var(--trans);display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:#1d4ed8}
+.btn-accent{background:var(--accent);color:#0a0f1e}
+.btn-accent:hover{background:#d4a800}
+.btn-success{background:var(--success);color:#fff}
+.btn-success:hover{background:#059669}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{background:#dc2626}
+.btn-ghost{background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-xs{padding:3px 8px;font-size:11px}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.card2{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.card-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--primary)}
+.stat-card.accent::before{background:var(--accent)}
+.stat-card.success::before{background:var(--success)}
+.stat-card.danger::before{background:var(--danger)}
+.stat-card.cyan::before{background:var(--cyan)}
+.stat-val{font-size:28px;font-weight:800;color:var(--text);line-height:1}
+.stat-label{font-size:12px;color:var(--muted);margin-top:6px}
+.stat-icon{position:absolute;right:16px;top:16px;font-size:28px;opacity:.25}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+
+/* ATHLETE CARDS */
+.athlete-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;cursor:pointer;transition:all var(--trans);text-align:center}
+.athlete-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,.15)}
+.avatar{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;margin:0 auto 10px;background:linear-gradient(135deg,var(--primary),var(--cyan));color:#fff;flex-shrink:0;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar-sm{width:36px;height:36px;font-size:13px}
+.athlete-name{font-size:14px;font-weight:700;color:var(--text)}
+.athlete-branch{font-size:12px;color:var(--muted);margin-top:2px}
+.athlete-age{font-size:11px;color:var(--muted)}
+.att-bar-wrap{margin-top:8px;background:var(--card2);border-radius:4px;height:4px;overflow:hidden}
+.att-bar{height:4px;background:var(--success);border-radius:4px;transition:width .4s}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-success{background:rgba(16,185,129,.15);color:var(--success);border:1px solid rgba(16,185,129,.3)}
+.badge-danger{background:rgba(239,68,68,.15);color:var(--danger);border:1px solid rgba(239,68,68,.3)}
+.badge-warning{background:rgba(245,158,11,.15);color:var(--warning);border:1px solid rgba(245,158,11,.3)}
+.badge-primary{background:rgba(37,99,235,.15);color:var(--primary);border:1px solid rgba(37,99,235,.3)}
+.badge-accent{background:rgba(240,192,64,.15);color:var(--accent);border:1px solid rgba(240,192,64,.3)}
+.badge-cyan{background:rgba(6,214,240,.15);color:var(--cyan);border:1px solid rgba(6,214,240,.3)}
+.badge-muted{background:rgba(100,116,139,.15);color:var(--muted);border:1px solid rgba(100,116,139,.3)}
+
+/* FORMS */
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;color:var(--muted);margin-bottom:6px;display:block;font-weight:600}
+.form-control{width:100%;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;outline:none;transition:border var(--trans)}
+.form-control:focus{border-color:var(--primary)}
+select.form-control option{background:var(--card)}
+textarea.form-control{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* RADIO GROUP */
+.radio-group{display:flex;gap:8px;flex-wrap:wrap}
+.radio-opt{display:none}
+.radio-label{padding:7px 14px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;transition:all var(--trans);color:var(--muted)}
+.radio-opt:checked+.radio-label{border-color:var(--primary);background:rgba(37,99,235,.15);color:var(--primary)}
+
+/* SEARCH & FILTER */
+.search-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-input{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 12px 9px 36px;color:var(--text);font-size:13px;outline:none;transition:border var(--trans);flex:1;min-width:180px}
+.search-input:focus{border-color:var(--primary)}
+.search-wrap{position:relative;flex:1;min-width:180px}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
+.filter-chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:5px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:12px;color:var(--muted);transition:all var(--trans);user-select:none}
+.chip:hover{border-color:var(--primary);color:var(--text)}
+.chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* ATTENDANCE */
+.att-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.att-row{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.att-info{flex:1}
+.att-name{font-size:13px;font-weight:600}
+.att-branch-tag{font-size:11px;color:var(--muted)}
+.att-toggle{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:12px;font-weight:700;transition:all var(--trans)}
+.att-toggle.present{background:rgba(16,185,129,.15);color:var(--success);border:1px solid var(--success)}
+.att-toggle.absent{background:rgba(239,68,68,.1);color:var(--muted);border:1px solid var(--border)}
+
+/* DATE NAV */
+.date-nav{display:flex;align-items:center;gap:12px;background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 14px}
+.date-nav-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;transition:color var(--trans)}
+.date-nav-btn:hover{color:var(--accent)}
+#att-date-display{font-size:14px;font-weight:700;color:var(--accent);min-width:160px;text-align:center}
+
+/* DEV NOTES */
+.dev-note{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+.dev-note-body{flex:1}
+.dev-note-text{font-size:13px;color:var(--text);line-height:1.5}
+.dev-note-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.dev-note-del{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;font-size:16px;transition:color var(--trans)}
+.dev-note-del:hover{color:var(--danger)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);color:var(--muted);font-weight:600;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);transition:background var(--trans)}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+tbody td{padding:10px 12px;color:var(--text);vertical-align:middle}
+tbody tr:last-child{border-bottom:none}
+
+/* PROGRESS */
+.progress-wrap{background:var(--card2);border-radius:4px;height:8px;overflow:hidden;flex:1}
+.progress-bar{height:8px;background:var(--primary);border-radius:4px;transition:width .4s}
+.progress-bar.success{background:var(--success)}
+.progress-bar.danger{background:var(--danger)}
+.progress-bar.warning{background:var(--warning)}
+.progress-bar.accent{background:var(--accent)}
+
+/* CHART */
+.chart-wrap{position:relative;width:100%;padding-top:0}
+.chart-wrap canvas{max-height:280px}
+
+/* TABS */
+.tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)}
+.tab-btn{padding:10px 20px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;font-weight:600;border-bottom:2px solid transparent;transition:all var(--trans);margin-bottom:-1px}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity var(--trans)}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto;transform:translateY(20px);transition:transform var(--trans)}
+.modal-overlay.show .modal{transform:translateY(0)}
+.modal-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;transition:color var(--trans);line-height:1}
+.modal-close:hover{color:var(--danger)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-icon{font-size:56px;margin-bottom:12px;opacity:.4}
+.empty-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.empty-text{font-size:13px;margin-bottom:18px}
+
+/* GOALS */
+.goal-item{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:8px}
+.goal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.goal-label{font-size:13px;font-weight:700}
+.goal-values{font-size:12px;color:var(--muted);margin-bottom:6px}
+.goal-footer{display:flex;align-items:center;gap:10px;margin-top:8px}
+.goal-days{font-size:11px;color:var(--muted)}
+
+/* INJURY / COMP */
+.injury-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:8px}
+.injury-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.injury-title{font-size:13px;font-weight:700}
+.injury-desc{font-size:12px;color:var(--muted);margin-top:3px}
+.injury-dates{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* MEDAL */
+.medal-1{background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.medal-2{background:linear-gradient(135deg,#C0C0C0,#a0a0a0);color:#000;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.medal-3{background:linear-gradient(135deg,#CD7F32,#8B4513);color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.medal-other{background:var(--card2);color:var(--muted);border:1px solid var(--border);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0}
+
+/* SECTION TITLE */
+.section-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  #sidebar{transform:translateX(-220px)}
+  #sidebar.open{transform:translateX(0)}
+  #main{margin-left:0}
+  #hamburger{display:block}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .form-row,.form-row-3{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:1fr 1fr}
+  #page-content{padding:14px}
+}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;align-items:center;gap:8px}
+.toggle{position:relative;width:40px;height:22px;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--border);border-radius:11px;transition:all var(--trans)}
+.toggle-slider:before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:all var(--trans)}
+.toggle input:checked+.toggle-slider{background:var(--success)}
+.toggle input:checked+.toggle-slider:before{transform:translateX(18px)}
+
+/* OVERLAY for sidebar on mobile */
+#sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99}
+#sidebar-overlay.show{display:block}
+</style>
+</head>
+<body>
+
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">DPÜ</div>
+    <div>
+      <div class="logo-text">DPÜ Spor Kulübü</div>
+      <div class="logo-sub">Sporcu Takip Sistemi</div>
+    </div>
+  </div>
+  <div class="sidebar-nav" id="sidebar-nav"></div>
+  <div class="sidebar-footer">v1.0 &copy; 2025 DPÜ SK</div>
+</nav>
+
+<div id="main">
+  <div id="topbar">
+    <button id="hamburger" onclick="toggleSidebar()">☰</button>
+    <div>
+      <div id="topbar-title">Ana Sayfa</div>
+      <div id="topbar-sub" id="topbar-sub"></div>
+    </div>
+    <div id="topbar-actions"></div>
+  </div>
+  <div id="page-content"></div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-athlete"><div class="modal" id="modal-athlete-inner"></div></div>
+<div class="modal-overlay" id="modal-detail"><div class="modal" id="modal-detail-inner"></div></div>
+<div class="modal-overlay" id="modal-generic"><div class="modal" id="modal-generic-inner"></div></div>
+
+<script>
+// ============================================================
+// DATA STORE
+// ============================================================
+const STORAGE_KEY = 'dpu_sporcu_v1';
+const BRANCHES = ['Güreş','Judo','Karate','Taekwondo','Halter','Boks','Yüzme','Atletizm'];
+
+const DEFAULT_MEASURE_TYPES = [
+  {id:'mt1',name:'Boy',unit:'cm',higherIsBetter:true,category:'Genel'},
+  {id:'mt2',name:'Kilo',unit:'kg',higherIsBetter:false,category:'Genel'},
+  {id:'mt3',name:'Beden Yağı',unit:'%',higherIsBetter:false,category:'Genel'},
+  {id:'mt4',name:'Dikey Sıçrama',unit:'cm',higherIsBetter:true,category:'Performans'},
+  {id:'mt5',name:'30m Sprint',unit:'sn',higherIsBetter:false,category:'Performans'},
+  {id:'mt6',name:'Esneklik',unit:'cm',higherIsBetter:true,category:'Performans'},
+];
+
+function loadData(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const d=JSON.parse(raw);
+      if(!d.measureTypes||d.measureTypes.length===0) d.measureTypes=[...DEFAULT_MEASURE_TYPES];
+      return d;
+    }
+  }catch(e){}
+  return {athletes:[],attendance:[],development:[],measurements:[],measureTypes:[...DEFAULT_MEASURE_TYPES],goals:[],competitions:[],injuries:[]};
+}
+
+function saveData(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(DB));
+}
+
+let DB=loadData();
+window.appCharts={};
+
+// ============================================================
+// UTILS
+// ============================================================
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function today(){return new Date().toISOString().split('T')[0]}
+function formatDate(d){
+  if(!d)return '-';
+  const months=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+  const dt=new Date(d+'T00:00:00');
+  return dt.getDate()+' '+months[dt.getMonth()]+' '+dt.getFullYear();
+}
+function getAge(birthDate){
+  if(!birthDate)return '-';
+  const diff=Date.now()-new Date(birthDate).getTime();
+  return Math.floor(diff/31557600000);
+}
+function getInitials(name){
+  if(!name)return '?';
+  const p=name.trim().split(/\s+/);
+  if(p.length>=2)return (p[0][0]+p[p.length-1][0]).toUpperCase();
+  return name.slice(0,2).toUpperCase();
+}
+function getAttRate(athleteId,days=30){
+  const end=new Date();const start=new Date();start.setDate(start.getDate()-days);
+  const recs=DB.attendance.filter(a=>a.athleteId===athleteId&&new Date(a.date)>=start&&new Date(a.date)<=end);
+  if(!recs.length)return null;
+  return Math.round(recs.filter(a=>a.present).length/recs.length*100);
+}
+function destroyChart(key){
+  if(window.appCharts[key]){try{window.appCharts[key].destroy()}catch(e){}delete window.appCharts[key]}
+}
+function escHtml(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
+function getAthlete(id){return DB.athletes.find(a=>a.id===id)}
+function athleteName(id){const a=getAthlete(id);return a?a.name:'?'}
+function getMeasureType(id){return DB.measureTypes.find(t=>t.id===id)}
+function avatarHtml(athlete,size=''){
+  const cls='avatar'+(size?' avatar-'+size:'');
+  if(athlete.photo){return `<div class="${cls}"><img src="${escHtml(athlete.photo)}" alt=""></div>`}
+  const colors=[['#2563eb','#06d6f0'],['#7c3aed','#06d6f0'],['#db2777','#f0c040'],['#059669','#06d6f0'],['#d97706','#f0c040']];
+  const ci=Math.abs(athlete.name.charCodeAt(0)+athlete.name.charCodeAt(1||0))%colors.length;
+  const [c1,c2]=colors[ci];
+  return `<div class="${cls}" style="background:linear-gradient(135deg,${c1},${c2})">${getInitials(athlete.name)}</div>`;
+}
+function datesBetween(start,end){
+  const dates=[];let cur=new Date(start+'T00:00:00');const e=new Date(end+'T00:00:00');
+  while(cur<=e){dates.push(cur.toISOString().split('T')[0]);cur.setDate(cur.getDate()+1)}
+  return dates;
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const NAV_ITEMS=[
+  {id:'dashboard',icon:'🏠',label:'Ana Sayfa'},
+  {id:'athletes',icon:'👥',label:'Sporcular'},
+  {id:'attendance',icon:'✅',label:'Yoklama',dot:true},
+  {id:'development',icon:'📝',label:'Gelişim Notları'},
+  {id:'measurements',icon:'📏',label:'Ölçümler'},
+  {id:'goals',icon:'🎯',label:'Hedefler'},
+  {id:'competitions',icon:'🏆',label:'Yarışmalar'},
+  {id:'injuries',icon:'🤕',label:'Sakatlıklar'},
+  {id:'reports',icon:'📊',label:'Raporlar'},
+];
+
+let currentPage='dashboard';
+
+function hasTodayAttendance(){
+  const t=today();
+  const active=DB.athletes.filter(a=>a.active);
+  if(!active.length)return true;
+  return active.some(a=>DB.attendance.find(r=>r.athleteId===a.id&&r.date===t));
+}
+
+function renderSidebar(){
+  const nav=document.getElementById('sidebar-nav');
+  nav.innerHTML=NAV_ITEMS.map(item=>{
+    const showDot=item.dot&&!hasTodayAttendance()&&DB.athletes.filter(a=>a.active).length>0;
+    return `<div class="nav-item${currentPage===item.id?' active':''}" onclick="navigateTo('${item.id}')">
+      <span class="nav-icon">${item.icon}</span>
+      <span>${item.label}</span>
+      ${showDot?'<span class="nav-dot"></span>':''}
+    </div>`;
+  }).join('');
+}
+
+function navigateTo(page){
+  currentPage=page;
+  renderSidebar();
+  const item=NAV_ITEMS.find(n=>n.id===page);
+  document.getElementById('topbar-title').textContent=item?item.label:'';
+  // destroy all charts on page switch
+  Object.keys(window.appCharts).forEach(k=>destroyChart(k));
+  renderPage(page);
+  closeSidebar();
+}
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('show');
+}
+
+// ============================================================
+// CHART DEFAULTS
+// ============================================================
+Chart.defaults.color='#64748b';
+Chart.defaults.borderColor='#1e2d4a';
+Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+const CHART_COLORS=['#2563eb','#f0c040','#06d6f0','#10b981','#ef4444','#f59e0b','#7c3aed','#db2777'];
+
+function chartDefaults(){
+  return {
+    responsive:true,maintainAspectRatio:true,
+    plugins:{legend:{labels:{color:'#e2e8f0',font:{size:12}}},tooltip:{backgroundColor:'#1a2236',titleColor:'#e2e8f0',bodyColor:'#94a3b8',borderColor:'#1e2d4a',borderWidth:1}},
+    scales:{}
+  };
+}
+function darkScales(){
+  return {
+    x:{ticks:{color:'#64748b'},grid:{color:'rgba(30,45,74,.5)'}},
+    y:{ticks:{color:'#64748b'},grid:{color:'rgba(30,45,74,.5)'}}
+  };
+}
+
+// ============================================================
+// PAGE ROUTER
+// ============================================================
+function renderPage(page){
+  const content=document.getElementById('page-content');
+  const actions=document.getElementById('topbar-actions');
+  actions.innerHTML='';
+  switch(page){
+    case'dashboard':renderDashboard(content,actions);break;
+    case'athletes':renderAthletes(content,actions);break;
+    case'attendance':renderAttendance(content,actions);break;
+    case'development':renderDevelopment(content,actions);break;
+    case'measurements':renderMeasurements(content,actions);break;
+    case'goals':renderGoals(content,actions);break;
+    case'competitions':renderCompetitions(content,actions);break;
+    case'injuries':renderInjuries(content,actions);break;
+    case'reports':renderReports(content,actions);break;
+    default:content.innerHTML='<p>Sayfa bulunamadı.</p>';
+  }
+}
+
+// ============================================================
+// 1. DASHBOARD
+// ============================================================
+function renderDashboard(el,actions){
+  const active=DB.athletes.filter(a=>a.active);
+  const t=today();
+  const todayAtt=DB.attendance.filter(a=>a.date===t);
+  const todayPct=active.length?Math.round(todayAtt.filter(a=>a.present).length/active.length*100):0;
+  const activeInjuries=DB.injuries.filter(i=>i.status==='active').length;
+  const activeGoals=DB.goals.filter(g=>g.status==='active');
+
+  el.innerHTML=`
+  <div class="stat-grid">
+    <div class="stat-card accent"><div class="stat-icon">👥</div><div class="stat-val">${DB.athletes.length}</div><div class="stat-label">Toplam Sporcu</div></div>
+    <div class="stat-card success"><div class="stat-icon">✅</div><div class="stat-val">${todayPct}%</div><div class="stat-label">Bugünkü Yoklama</div></div>
+    <div class="stat-card cyan"><div class="stat-icon">🏃</div><div class="stat-val">${active.length}</div><div class="stat-label">Aktif Sporcu</div></div>
+    <div class="stat-card danger"><div class="stat-icon">🤕</div><div class="stat-val">${activeInjuries}</div><div class="stat-label">Aktif Sakatlık</div></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">📊 Bugünkü Yoklama - Branş Bazlı</div>
+      <div class="chart-wrap"><canvas id="chart-dash-att" height="220"></canvas></div>
+      <div style="margin-top:12px;text-align:center"><button class="btn btn-ghost btn-sm" onclick="navigateTo('attendance')">Yoklamaya Git →</button></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📝 Son Gelişim Notları</div>
+      <div id="dash-dev-notes"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🎯 Aktif Hedefler</div>
+    <div id="dash-goals"></div>
+  </div>`;
+
+  // Doughnut chart - branch attendance today
+  setTimeout(()=>{
+    const ctx=document.getElementById('chart-dash-att');
+    if(!ctx)return;
+    const branchData=BRANCHES.map(b=>{
+      const bathletes=active.filter(a=>a.branch===b);
+      if(!bathletes.length)return null;
+      const present=bathletes.filter(a=>todayAtt.find(r=>r.athleteId===a.id&&r.present)).length;
+      return{label:b,present,total:bathletes.length};
+    }).filter(Boolean);
+    if(!branchData.length){ctx.parentElement.innerHTML='<div class="empty-state" style="padding:30px"><div class="empty-icon">📊</div><div>Henüz yoklama alınmadı</div></div>';return;}
+    destroyChart('dash-att');
+    window.appCharts['dash-att']=new Chart(ctx,{
+      type:'doughnut',
+      data:{labels:branchData.map(b=>b.label),datasets:[{data:branchData.map(b=>b.present),backgroundColor:CHART_COLORS,borderColor:'#111827',borderWidth:2}]},
+      options:{...chartDefaults(),plugins:{...chartDefaults().plugins,legend:{position:'right',labels:{color:'#e2e8f0',font:{size:11}}}}}
+    });
+  },50);
+
+  // Dev notes
+  const notesEl=document.getElementById('dash-dev-notes');
+  const lastNotes=DB.development.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+  if(!lastNotes.length){notesEl.innerHTML='<div class="empty-state" style="padding:20px"><div class="empty-icon" style="font-size:32px">📝</div><div>Henüz not yok</div></div>';return;}
+  notesEl.innerHTML=lastNotes.map(n=>{
+    const a=getAthlete(n.athleteId);
+    const badges={pos:'<span class="badge badge-success">✅ Pozitif</span>',neg:'<span class="badge badge-danger">❌ Negatif</span>',note:'<span class="badge badge-primary">📝 Not</span>'};
+    return `<div class="dev-note" style="margin-bottom:8px">
+      ${a?avatarHtml(a,'sm'):'<div class="avatar avatar-sm">?</div>'}
+      <div class="dev-note-body">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">${badges[n.type]||''}<span style="font-size:13px;font-weight:600">${escHtml(a?a.name:'?')}</span></div>
+        <div class="dev-note-text">${escHtml(n.text)}</div>
+        <div class="dev-note-meta">${formatDate(n.date)}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Goals
+  const goalsEl=document.getElementById('dash-goals');
+  if(!activeGoals.length){goalsEl.innerHTML='<div style="color:var(--muted);font-size:13px;padding:10px 0">Aktif hedef bulunmuyor.</div>';return;}
+  goalsEl.innerHTML=activeGoals.slice(0,6).map(g=>{
+    const a=getAthlete(g.athleteId);const mt=getMeasureType(g.typeId);
+    if(!a||!mt)return'';
+    const lastM=DB.measurements.filter(m=>m.athleteId===g.athleteId&&m.typeId===g.typeId).sort((a,b)=>b.date.localeCompare(a.date))[0];
+    const cur=lastM?lastM.value:g.startValue||0;
+    let pct=0;
+    if(mt.higherIsBetter){pct=Math.max(0,Math.min(100,Math.round((cur-g.startValue)/(g.targetValue-g.startValue)*100)));}
+    else{pct=Math.max(0,Math.min(100,Math.round((g.startValue-cur)/(g.startValue-g.targetValue)*100)));}
+    if(isNaN(pct))pct=0;
+    const days=Math.ceil((new Date(g.targetDate)-new Date())/86400000);
+    return `<div class="goal-item">
+      <div class="goal-header">
+        <span class="goal-label">${escHtml(a.name)} - ${escHtml(mt.name)}</span>
+        <span class="badge badge-primary">${days>0?days+' gün':'Süresi doldu'}</span>
+      </div>
+      <div class="goal-values">${cur} ${mt.unit} → ${g.targetValue} ${mt.unit} (Hedef: ${formatDate(g.targetDate)})</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="progress-wrap"><div class="progress-bar${pct>=100?' success':''}" style="width:${pct}%"></div></div>
+        <span style="font-size:12px;color:var(--muted);white-space:nowrap">${pct}%</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// 2. ATHLETES
+// ============================================================
+let athleteFilter={search:'',branch:'',activeOnly:false};
+
+function renderAthletes(el,actions){
+  actions.innerHTML=`<button class="btn btn-accent" onclick="openAthleteModal()">+ Sporcu Ekle</button>`;
+  el.innerHTML=`
+  <div class="search-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="ath-search" placeholder="İsim ara..." value="${escHtml(athleteFilter.search)}" oninput="athleteFilter.search=this.value;renderAthleteGrid()">
+    </div>
+    <div class="filter-chips" id="branch-chips"></div>
+    <div class="toggle-wrap">
+      <label class="toggle"><input type="checkbox" id="active-toggle" ${athleteFilter.activeOnly?'checked':''} onchange="athleteFilter.activeOnly=this.checked;renderAthleteGrid()"><span class="toggle-slider"></span></label>
+      <span style="font-size:12px;color:var(--muted)">Sadece Aktif</span>
+    </div>
+  </div>
+  <div id="athlete-grid"></div>`;
+
+  const chips=document.getElementById('branch-chips');
+  chips.innerHTML=[{v:'',l:'Tümü'},...BRANCHES.map(b=>({v:b,l:b}))].map(({v,l})=>
+    `<span class="chip${athleteFilter.branch===v?' active':''}" onclick="athleteFilter.branch='${v}';document.querySelectorAll('#branch-chips .chip').forEach(c=>c.classList.remove('active'));this.classList.add('active');renderAthleteGrid()">${l}</span>`
+  ).join('');
+
+  renderAthleteGrid();
+}
+
+function renderAthleteGrid(){
+  const el=document.getElementById('athlete-grid');
+  if(!el)return;
+  let list=DB.athletes;
+  if(athleteFilter.search)list=list.filter(a=>a.name.toLowerCase().includes(athleteFilter.search.toLowerCase())||a.branch.toLowerCase().includes(athleteFilter.search.toLowerCase()));
+  if(athleteFilter.branch)list=list.filter(a=>a.branch===athleteFilter.branch);
+  if(athleteFilter.activeOnly)list=list.filter(a=>a.active);
+
+  if(!list.length){
+    el.innerHTML=`<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-title">Sporcu bulunamadı</div><div class="empty-text">${DB.athletes.length?'Filtreleri değiştirin.':'Henüz sporcu eklenmemiş.'}</div>${!DB.athletes.length?'<button class="btn btn-accent" onclick="openAthleteModal()">+ Sporcu Ekle</button>':''}</div>`;
+    return;
+  }
+  el.innerHTML=`<div class="grid-4">${list.map(a=>{
+    const att=getAttRate(a.id,30);
+    const attDisp=att!==null?att+'%':'—';
+    const attPct=att!==null?att:0;
+    return `<div class="athlete-card" onclick="openAthleteDetail('${a.id}')">
+      ${avatarHtml(a)}
+      <div class="athlete-name">${escHtml(a.name)}</div>
+      <div class="athlete-branch">${escHtml(a.branch)}</div>
+      <div class="athlete-age">${getAge(a.birthDate)} yaş${a.weightClass?' · '+escHtml(a.weightClass):''}</div>
+      <div class="att-bar-wrap" title="Son 30 gün: ${attDisp}"><div class="att-bar" style="width:${attPct}%"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Katılım: ${attDisp}</div>
+      <div style="margin-top:6px">${a.active?'<span class="badge badge-success">Aktif</span>':'<span class="badge badge-muted">Pasif</span>'}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function openAthleteModal(id){
+  const a=id?getAthlete(id):null;
+  const modal=document.getElementById('modal-athlete-inner');
+  modal.innerHTML=`
+  <div class="modal-title">${a?'Sporcu Düzenle':'Sporcu Ekle'}<button class="modal-close" onclick="closeModal('modal-athlete')">✕</button></div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Ad Soyad *</label><input class="form-control" id="af-name" value="${a?escHtml(a.name):''}"></div>
+    <div class="form-group"><label class="form-label">Branş *</label><select class="form-control" id="af-branch">${BRANCHES.map(b=>`<option${a&&a.branch===b?' selected':''}>${b}</option>`).join('')}</select></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Doğum Tarihi</label><input type="date" class="form-control" id="af-birth" value="${a?escHtml(a.birthDate||''):''}"></div>
+    <div class="form-group"><label class="form-label">Cinsiyet</label><select class="form-control" id="af-gender"><option value="">Seçin</option><option${a&&a.gender==='Erkek'?' selected':''}>Erkek</option><option${a&&a.gender==='Kadın'?' selected':''}>Kadın</option></select></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Telefon</label><input class="form-control" id="af-phone" value="${a?escHtml(a.phone||''):''}"></div>
+    <div class="form-group"><label class="form-label">Sıklet / Kategori</label><input class="form-control" id="af-wclass" placeholder="örn: -66kg" value="${a?escHtml(a.weightClass||''):''}"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Katılım Tarihi</label><input type="date" class="form-control" id="af-join" value="${a?escHtml(a.joinDate||''):today()}"></div>
+    <div class="form-group"><label class="form-label">Durum</label><select class="form-control" id="af-active"><option value="1"${!a||a.active?' selected':''}>Aktif</option><option value="0"${a&&!a.active?' selected':''}>Pasif</option></select></div>
+  </div>
+  <div class="form-group"><label class="form-label">Notlar</label><textarea class="form-control" id="af-notes">${a?escHtml(a.notes||''):''}</textarea></div>
+  <div class="form-group"><label class="form-label">Fotoğraf URL (isteğe bağlı)</label><input class="form-control" id="af-photo" placeholder="https://..." value="${a?escHtml(a.photo||''):''}"></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('modal-athlete')">İptal</button>
+    <button class="btn btn-accent" onclick="saveAthlete('${a?a.id:''}')">${a?'Kaydet':'Ekle'}</button>
+  </div>`;
+  showModal('modal-athlete');
+}
+
+function saveAthlete(id){
+  const name=document.getElementById('af-name').value.trim();
+  if(!name){alert('Ad Soyad zorunludur.');return;}
+  const obj={
+    id:id||genId(),name,
+    branch:document.getElementById('af-branch').value,
+    birthDate:document.getElementById('af-birth').value,
+    gender:document.getElementById('af-gender').value,
+    phone:document.getElementById('af-phone').value.trim(),
+    weightClass:document.getElementById('af-wclass').value.trim(),
+    joinDate:document.getElementById('af-join').value,
+    active:document.getElementById('af-active').value==='1',
+    notes:document.getElementById('af-notes').value.trim(),
+    photo:document.getElementById('af-photo').value.trim(),
+  };
+  if(id){const i=DB.athletes.findIndex(a=>a.id===id);if(i>=0)DB.athletes[i]=obj;}
+  else DB.athletes.push(obj);
+  saveData();
+  closeModal('modal-athlete');
+  renderAthleteGrid();
+  renderSidebar();
+}
+
+function openAthleteDetail(id){
+  const a=getAthlete(id);if(!a)return;
+  const att30=getAttRate(id,30);
+  const allAtt=DB.attendance.filter(r=>r.athleteId===id);
+  const attAll=allAtt.length?Math.round(allAtt.filter(r=>r.present).length/allAtt.length*100):null;
+  const lastM=DB.measurements.filter(m=>m.athleteId===id).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const modal=document.getElementById('modal-detail-inner');
+  modal.innerHTML=`
+  <div class="modal-title">Sporcu Detay<button class="modal-close" onclick="closeModal('modal-detail')">✕</button></div>
+  <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:16px">
+    ${avatarHtml(a)}
+    <div style="flex:1">
+      <div style="font-size:18px;font-weight:800">${escHtml(a.name)}</div>
+      <div style="color:var(--muted);font-size:13px">${escHtml(a.branch)}${a.weightClass?' · '+escHtml(a.weightClass):''}</div>
+      <div style="margin-top:6px">${a.active?'<span class="badge badge-success">Aktif</span>':'<span class="badge badge-muted">Pasif</span>'}</div>
+    </div>
+  </div>
+  <div class="grid-3" style="margin-bottom:14px">
+    <div class="card2" style="text-align:center"><div style="font-size:20px;font-weight:800;color:var(--accent)">${allAtt.length}</div><div style="font-size:11px;color:var(--muted)">Toplam Seans</div></div>
+    <div class="card2" style="text-align:center"><div style="font-size:20px;font-weight:800;color:var(--success)">${attAll!==null?attAll+'%':'—'}</div><div style="font-size:11px;color:var(--muted)">Genel Katılım</div></div>
+    <div class="card2" style="text-align:center"><div style="font-size:20px;font-weight:800;color:var(--cyan)">${lastM?formatDate(lastM.date):'—'}</div><div style="font-size:11px;color:var(--muted)">Son Ölçüm</div></div>
+  </div>
+  <div class="card2" style="margin-bottom:12px">
+    ${a.birthDate?`<div style="font-size:13px;margin-bottom:6px">🎂 <span style="color:var(--muted)">Doğum:</span> ${formatDate(a.birthDate)} (${getAge(a.birthDate)} yaş)</div>`:''}
+    ${a.gender?`<div style="font-size:13px;margin-bottom:6px">👤 <span style="color:var(--muted)">Cinsiyet:</span> ${escHtml(a.gender)}</div>`:''}
+    ${a.phone?`<div style="font-size:13px;margin-bottom:6px">📱 <span style="color:var(--muted)">Telefon:</span> ${escHtml(a.phone)}</div>`:''}
+    ${a.joinDate?`<div style="font-size:13px;margin-bottom:6px">📅 <span style="color:var(--muted)">Katılım:</span> ${formatDate(a.joinDate)}</div>`:''}
+    ${a.notes?`<div style="font-size:13px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);color:var(--muted)">${escHtml(a.notes)}</div>`:''}
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost btn-sm" onclick="toggleAthleteActive('${a.id}')">${a.active?'Pasife Al':'Aktif Yap'}</button>
+    <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-detail');openAthleteModal('${a.id}')">✏️ Düzenle</button>
+    <button class="btn btn-danger btn-sm" onclick="deleteAthlete('${a.id}')">🗑️ Sil</button>
+  </div>`;
+  showModal('modal-detail');
+}
+
+function toggleAthleteActive(id){
+  const a=getAthlete(id);if(!a)return;
+  a.active=!a.active;saveData();
+  closeModal('modal-detail');
+  renderAthleteGrid();
+  renderSidebar();
+}
+
+function deleteAthlete(id){
+  if(!confirm('Bu sporcu ve tüm verileri silinecek. Emin misiniz?'))return;
+  DB.athletes=DB.athletes.filter(a=>a.id!==id);
+  DB.attendance=DB.attendance.filter(a=>a.athleteId!==id);
+  DB.development=DB.development.filter(a=>a.athleteId!==id);
+  DB.measurements=DB.measurements.filter(a=>a.athleteId!==id);
+  DB.goals=DB.goals.filter(a=>a.athleteId!==id);
+  DB.competitions=DB.competitions.filter(a=>a.athleteId!==id);
+  DB.injuries=DB.injuries.filter(a=>a.athleteId!==id);
+  saveData();closeModal('modal-detail');renderAthleteGrid();renderSidebar();
+}
+
+// ============================================================
+// 3. ATTENDANCE
+// ============================================================
+let attDate=today();
+let attBranchFilter='';
+let attTab='daily';
+
+function renderAttendance(el,actions){
+  el.innerHTML=`
+  <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+    <div class="date-nav">
+      <button class="date-nav-btn" onclick="changeAttDate(-1)">‹</button>
+      <span id="att-date-display">${formatDate(attDate)}</span>
+      <button class="date-nav-btn" onclick="changeAttDate(1)">›</button>
+    </div>
+    <select class="form-control" style="width:auto" id="att-branch-filter" onchange="attBranchFilter=this.value;renderAttGrid()">
+      <option value="">Tüm Branşlar</option>
+      ${BRANCHES.map(b=>`<option${attBranchFilter===b?' selected':''}>${b}</option>`).join('')}
+    </select>
+    <button class="btn btn-ghost btn-sm" onclick="markAllPresent()">✅ Tümünü Geldi Yap</button>
+    <button class="btn btn-ghost btn-sm" onclick="markAllAbsent()">❌ Tümünü Gelmedi Yap</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn${attTab==='daily'?' active':''}" onclick="attTab='daily';renderAttTabContent()">Günlük Yoklama</button>
+    <button class="tab-btn${attTab==='history'?' active':''}" onclick="attTab='history';renderAttTabContent()">Geçmiş (30 gün)</button>
+  </div>
+  <div id="att-tab-content"></div>`;
+  renderAttTabContent();
+}
+
+function renderAttTabContent(){
+  // update tab styles
+  document.querySelectorAll('#page-content .tab-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',(i===0&&attTab==='daily')||(i===1&&attTab==='history'));
+  });
+  const el=document.getElementById('att-tab-content');
+  if(attTab==='daily')renderAttGrid();
+  else renderAttHistory(el);
+}
+
+function changeAttDate(delta){
+  const d=new Date(attDate+'T00:00:00');d.setDate(d.getDate()+delta);
+  attDate=d.toISOString().split('T')[0];
+  document.getElementById('att-date-display').textContent=formatDate(attDate);
+  renderAttGrid();
+  renderSidebar();
+}
+
+function renderAttGrid(){
+  const el=document.getElementById('att-tab-content');if(!el)return;
+  let athletes=DB.athletes.filter(a=>a.active);
+  if(attBranchFilter)athletes=athletes.filter(a=>a.branch===attBranchFilter);
+  if(!athletes.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">👥</div><div class="empty-title">Sporcu bulunamadı</div></div>';return;}
+
+  const presentCount=athletes.filter(a=>getAttRecord(a.id,attDate)?.present).length;
+  const pct=Math.round(presentCount/athletes.length*100);
+
+  el.innerHTML=`
+  <div class="att-grid" id="att-grid-inner">
+    ${athletes.map(a=>{
+      const rec=getAttRecord(a.id,attDate);
+      const present=rec?.present||false;
+      return `<div class="att-row">
+        ${avatarHtml(a,'sm')}
+        <div class="att-info"><div class="att-name">${escHtml(a.name)}</div><div class="att-branch-tag">${escHtml(a.branch)}</div></div>
+        <button class="att-toggle ${present?'present':'absent'}" onclick="toggleAtt('${a.id}')">${present?'✓ Geldi':'✗ Gelmedi'}</button>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="card2" style="margin-top:14px;display:flex;gap:24px;align-items:center;flex-wrap:wrap">
+    <div><span style="font-size:22px;font-weight:800;color:var(--success)">${presentCount}</span><span style="font-size:12px;color:var(--muted);margin-left:6px">Geldi</span></div>
+    <div><span style="font-size:22px;font-weight:800;color:var(--danger)">${athletes.length-presentCount}</span><span style="font-size:12px;color:var(--muted);margin-left:6px">Gelmedi</span></div>
+    <div><span style="font-size:22px;font-weight:800;color:var(--accent)">${pct}%</span><span style="font-size:12px;color:var(--muted);margin-left:6px">Katılım</span></div>
+  </div>`;
+}
+
+function getAttRecord(athleteId,date){
+  return DB.attendance.find(a=>a.athleteId===athleteId&&a.date===date);
+}
+
+function toggleAtt(athleteId){
+  const rec=getAttRecord(athleteId,attDate);
+  if(rec){rec.present=!rec.present;}
+  else{DB.attendance.push({id:genId(),athleteId,date:attDate,present:true,note:''});}
+  saveData();renderAttGrid();renderSidebar();
+}
+
+function markAllPresent(){
+  const athletes=DB.athletes.filter(a=>a.active&&(!attBranchFilter||a.branch===attBranchFilter));
+  athletes.forEach(a=>{
+    const rec=getAttRecord(a.id,attDate);
+    if(rec)rec.present=true;
+    else DB.attendance.push({id:genId(),athleteId:a.id,date:attDate,present:true,note:''});
+  });
+  saveData();renderAttGrid();renderSidebar();
+}
+function markAllAbsent(){
+  const athletes=DB.athletes.filter(a=>a.active&&(!attBranchFilter||a.branch===attBranchFilter));
+  athletes.forEach(a=>{
+    const rec=getAttRecord(a.id,attDate);
+    if(rec)rec.present=false;
+    else DB.attendance.push({id:genId(),athleteId:a.id,date:attDate,present:false,note:''});
+  });
+  saveData();renderAttGrid();renderSidebar();
+}
+
+function renderAttHistory(el){
+  // last 30 days
+  const end=today();const startD=new Date();startD.setDate(startD.getDate()-29);
+  const start=startD.toISOString().split('T')[0];
+  const dates=datesBetween(start,end).reverse();
+  const athletes=DB.athletes.filter(a=>a.active&&(!attBranchFilter||a.branch===attBranchFilter));
+
+  el.innerHTML=`<div class="table-wrap"><table>
+    <thead><tr><th>Sporcu</th><th>Branş</th>${dates.slice(0,15).map(d=>`<th>${d.slice(5)}</th>`).join('')}</tr></thead>
+    <tbody>${athletes.map(a=>`<tr>
+      <td style="font-weight:600;white-space:nowrap">${escHtml(a.name)}</td>
+      <td><span class="badge badge-primary">${escHtml(a.branch)}</span></td>
+      ${dates.slice(0,15).map(d=>{const r=getAttRecord(a.id,d);return `<td style="text-align:center">${r?r.present?'<span style="color:var(--success)">✓</span>':'<span style="color:var(--danger)">✗</span>':'<span style="color:var(--border)">-</span>'}</td>`;}).join('')}
+    </tr>`).join('')}
+    </tbody>
+  </table></div>`;
+}
+
+// ============================================================
+// 4. DEVELOPMENT NOTES
+// ============================================================
+let devAthleteId='';
+let devTypeFilter='all';
+
+function renderDevelopment(el,actions){
+  actions.innerHTML=`<button class="btn btn-accent" onclick="openDevNoteModal()">+ Not Ekle</button>`;
+  const active=DB.athletes.filter(a=>a.active);
+  el.innerHTML=`
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Sporcu Seç</div>
+    <select class="form-control" id="dev-athlete-sel" onchange="devAthleteId=this.value;renderDevNotes()" style="max-width:300px">
+      <option value="">-- Tüm Sporcular --</option>
+      ${DB.athletes.map(a=>`<option value="${a.id}"${devAthleteId===a.id?' selected':''}>${escHtml(a.name)} (${escHtml(a.branch)})</option>`).join('')}
+    </select>
+  </div>
+  <div class="filter-chips" style="margin-bottom:14px">
+    ${['all','pos','neg','note'].map((t,i)=>{
+      const labels=['Hepsi','✅ Pozitif','❌ Negatif','📝 Not'];
+      return `<span class="chip${devTypeFilter===t?' active':''}" onclick="devTypeFilter='${t}';document.querySelectorAll('#page-content .filter-chips .chip').forEach(c=>c.classList.remove('active'));this.classList.add('active');renderDevNotes()">${labels[i]}</span>`;
+    }).join('')}
+  </div>
+  <div id="dev-notes-list"></div>`;
+  renderDevNotes();
+}
+
+function renderDevNotes(){
+  const el=document.getElementById('dev-notes-list');if(!el)return;
+  let notes=DB.development.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  if(devAthleteId)notes=notes.filter(n=>n.athleteId===devAthleteId);
+  if(devTypeFilter!=='all')notes=notes.filter(n=>n.type===devTypeFilter);
+  if(!notes.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-title">Not bulunamadı</div></div>';return;}
+  const badges={pos:'<span class="badge badge-success">✅ Pozitif</span>',neg:'<span class="badge badge-danger">❌ Negatif</span>',note:'<span class="badge badge-primary">📝 Not</span>'};
+  el.innerHTML=notes.map(n=>{
+    const a=getAthlete(n.athleteId);
+    return `<div class="dev-note">
+      ${a?avatarHtml(a,'sm'):'<div class="avatar avatar-sm">?</div>'}
+      <div class="dev-note-body">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">${badges[n.type]||''}<span style="font-size:13px;font-weight:600">${escHtml(a?a.name:'?')}</span></div>
+        <div class="dev-note-text">${escHtml(n.text)}</div>
+        <div class="dev-note-meta">${formatDate(n.date)}</div>
+      </div>
+      <button class="dev-note-del" onclick="deleteDevNote('${n.id}')">🗑️</button>
+    </div>`;
+  }).join('');
+}
+
+function openDevNoteModal(preAthleteId){
+  const aid=preAthleteId||devAthleteId||'';
+  const inner=document.getElementById('modal-generic-inner');
+  inner.innerHTML=`
+  <div class="modal-title">Gelişim Notu Ekle<button class="modal-close" onclick="closeModal('modal-generic')">✕</button></div>
+  <div class="form-group"><label class="form-label">Sporcu *</label>
+    <select class="form-control" id="dn-athlete">${DB.athletes.map(a=>`<option value="${a.id}"${a.id===aid?' selected':''}>${escHtml(a.name)} (${escHtml(a.branch)})</option>`).join('')}</select>
+  </div>
+  <div class="form-group"><label class="form-label">Not Tarihi</label><input type="date" class="form-control" id="dn-date" value="${today()}"></div>
+  <div class="form-group"><label class="form-label">Tür *</label>
+    <div class="radio-group">
+      <input type="radio" name="dn-type" id="dn-pos" value="pos" class="radio-opt" checked><label for="dn-pos" class="radio-label">✅ Pozitif</label>
+      <input type="radio" name="dn-type" id="dn-neg" value="neg" class="radio-opt"><label for="dn-neg" class="radio-label">❌ Negatif</label>
+      <input type="radio" name="dn-type" id="dn-note" value="note" class="radio-opt"><label for="dn-note" class="radio-label">📝 Not</label>
+    </div>
+  </div>
+  <div class="form-group"><label class="form-label">Not *</label><textarea class="form-control" id="dn-text" placeholder="Not içeriği..."></textarea></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('modal-generic')">İptal</button>
+    <button class="btn btn-accent" onclick="saveDevNote()">Kaydet</button>
+  </div>`;
+  showModal('modal-generic');
+}
+
+function saveDevNote(){
+  const athleteId=document.getElementById('dn-athlete').value;
+  const text=document.getElementById('dn-text').value.trim();
+  const type=document.querySelector('input[name="dn-type"]:checked')?.value||'note';
+  const date=document.getElementById('dn-date').value||today();
+  if(!athleteId||!text){alert('Sporcu ve not alanları zorunludur.');return;}
+  DB.development.push({id:genId(),athleteId,date,type,text});
+  saveData();closeModal('modal-generic');renderDevNotes();
+}
+
+function deleteDevNote(id){
+  if(!confirm('Not silinecek. Emin misiniz?'))return;
+  DB.development=DB.development.filter(n=>n.id!==id);
+  saveData();renderDevNotes();
+}
+
+// ============================================================
+// 5. MEASUREMENTS
+// ============================================================
+let measAthleteId='';
+let measTypeId='';
+let measTab='data';
+
+function renderMeasurements(el,actions){
+  el.innerHTML=`
+  <div class="tabs">
+    <button class="tab-btn${measTab==='data'?' active':''}" onclick="measTab='data';renderMeasTab()">Sporcu Ölçümleri</button>
+    <button class="tab-btn${measTab==='types'?' active':''}" onclick="measTab='types';renderMeasTab()">Ölçüm Türleri</button>
+  </div>
+  <div id="meas-tab-content"></div>`;
+  renderMeasTab();
+}
+
+function renderMeasTab(){
+  document.querySelectorAll('#page-content .tab-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',(i===0&&measTab==='data')||(i===1&&measTab==='types'));
+  });
+  const el=document.getElementById('meas-tab-content');
+  if(measTab==='data')renderMeasData(el);
+  else renderMeasTypes(el);
+}
+
+function renderMeasData(el){
+  const actions=document.getElementById('topbar-actions');
+  actions.innerHTML=`<button class="btn btn-accent" onclick="openAddMeasModal()">+ Ölçüm Ekle</button>`;
+
+  el.innerHTML=`
+  <div class="card" style="margin-bottom:16px">
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Sporcu</label>
+        <select class="form-control" id="meas-ath-sel" onchange="measAthleteId=this.value;measTypeId=measTypeId||'${DB.measureTypes[0]?.id||''}';renderMeasChart()">
+          <option value="">Sporcu seçin...</option>
+          ${DB.athletes.map(a=>`<option value="${a.id}"${measAthleteId===a.id?' selected':''}>${escHtml(a.name)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Ölçüm Türü</label>
+        <select class="form-control" id="meas-type-sel" onchange="measTypeId=this.value;renderMeasChart()">
+          <option value="">Tür seçin...</option>
+          ${DB.measureTypes.map(t=>`<option value="${t.id}"${measTypeId===t.id?' selected':''}>${escHtml(t.name)} (${escHtml(t.unit)})</option>`).join('')}
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="meas-chart-area"></div>
+  <div id="meas-table-area" style="margin-top:16px"></div>`;
+
+  if(measAthleteId&&measTypeId)renderMeasChart();
+}
+
+function renderMeasChart(){
+  const chartArea=document.getElementById('meas-chart-area');
+  const tableArea=document.getElementById('meas-table-area');
+  if(!chartArea)return;
+  if(!measAthleteId||!measTypeId){chartArea.innerHTML='';tableArea.innerHTML='';return;}
+  const mt=getMeasureType(measTypeId);
+  const data=DB.measurements.filter(m=>m.athleteId===measAthleteId&&m.typeId===measTypeId).sort((a,b)=>a.date.localeCompare(b.date));
+
+  chartArea.innerHTML=`<div class="card"><div class="card-title">${escHtml(mt?mt.name:'Ölçüm')} Grafiği</div><div class="chart-wrap"><canvas id="meas-chart" height="200"></canvas></div></div>`;
+
+  setTimeout(()=>{
+    const ctx=document.getElementById('meas-chart');if(!ctx)return;
+    destroyChart('meas-main');
+    if(!data.length){ctx.parentElement.innerHTML='<div class="empty-state" style="padding:30px"><div class="empty-icon">📏</div><div>Henüz ölçüm yok</div></div>';return;}
+    window.appCharts['meas-main']=new Chart(ctx,{
+      type:'line',
+      data:{
+        labels:data.map(d=>d.date.slice(5)),
+        datasets:[{label:mt?mt.name+' ('+mt.unit+')':'',data:data.map(d=>d.value),borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.1)',borderWidth:2,pointBackgroundColor:'#f0c040',pointRadius:5,tension:.3,fill:true}]
+      },
+      options:{...chartDefaults(),scales:darkScales()}
+    });
+  },50);
+
+  if(!tableArea)return;
+  tableArea.innerHTML=`<div class="card">
+    <div class="card-title">Ölçüm Geçmişi</div>
+    ${data.length?`<div class="table-wrap"><table>
+      <thead><tr><th>Tarih</th><th>Değer</th><th>Değişim</th><th></th></tr></thead>
+      <tbody>${data.slice().reverse().map((m,i,arr)=>{
+        const prev=arr[i+1];
+        const diff=prev?m.value-prev.value:null;
+        let diffHtml='';
+        if(diff!==null){
+          const better=(mt?.higherIsBetter&&diff>0)||(!mt?.higherIsBetter&&diff<0);
+          diffHtml=`<span style="color:${diff===0?'var(--muted)':better?'var(--success)':'var(--danger)'}">${diff>0?'+':''}${diff.toFixed(2)} ${mt?mt.unit:''}</span>`;
+        }
+        return `<tr><td>${formatDate(m.date)}</td><td><strong>${m.value} ${mt?mt.unit:''}</strong></td><td>${diffHtml||'—'}</td><td><button class="btn btn-danger btn-xs" onclick="deleteMeasurement('${m.id}')">Sil</button></td></tr>`;
+      }).join('')}
+      </tbody>
+    </table></div>`:
+    '<div style="color:var(--muted);font-size:13px;padding:10px 0">Henüz ölçüm kaydı yok.</div>'}
+  </div>`;
+}
+
+function openAddMeasModal(preAthleteId,preTypeId){
+  const inner=document.getElementById('modal-generic-inner');
+  inner.innerHTML=`
+  <div class="modal-title">Ölçüm Ekle<button class="modal-close" onclick="closeModal('modal-generic')">✕</button></div>
+  <div class="form-group"><label class="form-label">Sporcu *</label>
+    <select class="form-control" id="am-athlete">${DB.athletes.map(a=>`<option value="${a.id}"${(preAthleteId||measAthleteId)===a.id?' selected':''}>${escHtml(a.name)}</option>`).join('')}</select>
+  </div>
+  <div class="form-group"><label class="form-label">Ölçüm Türü *</label>
+    <select class="form-control" id="am-type">${DB.measureTypes.map(t=>`<option value="${t.id}"${(preTypeId||measTypeId)===t.id?' selected':''}>${escHtml(t.name)} (${escHtml(t.unit)})</option>`).join('')}</select>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Tarih *</label><input type="date" class="form-control" id="am-date" value="${today()}"></div>
+    <div class="form-group"><label class="form-label">Değer *</label><input type="number" step="any" class="form-control" id="am-value" placeholder="0.0"></div>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('modal-generic')">İptal</button>
+    <button class="btn btn-accent" onclick="saveMeasurement()">Kaydet</button>
+  </div>`;
+  showModal('modal-generic');
+}
+
+function saveMeasurement(){
+  const athleteId=document.getElementById('am-athlete').value;
+  const typeId=document.getElementById('am-type').value;
+  const date=document.getElementById('am-date').value||today();
+  const value=parseFloat(document.getElementById('am-value').value);
+  if(!athleteId||!typeId||isNaN(value)){alert('Tüm alanları doldurun.');return;}
+  DB.measurements.push({id:genId(),athleteId,typeId,date,value});
+  saveData();closeModal('modal-generic');
+  measAthleteId=athleteId;measTypeId=typeId;
+  if(measTab==='data')renderMeasChart();
+}
+
+function deleteMeasurement(id){
+  if(!confirm('Ölçüm silinecek?'))return;
+  DB.measurements=DB.measurements.filter(m=>m.id!==id);
+  saveData();renderMeasChart();
+}
+
+function renderMeasTypes(el){
+  const actions=document.getElementById('topbar-actions');
+  actions.innerHTML=`<button class="btn btn-accent" onclick="openAddMeasTypeModal()">+ Tür Ekle</button>`;
+  el.innerHTML=`<div class="card">
+    <div class="card-title">Ölçüm Türleri</div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>İsim</th><th>Birim</th><th>Kategori</th><th>Yüksek Daha İyi</th><th></th></tr></thead>
+      <tbody>${DB.measureTypes.map(t=>`<tr>
+        <td><strong>${escHtml(t.name)}</strong></td>
+        <td>${escHtml(t.unit)}</td>
+        <td>${escHtml(t.category||'—')}</td>
+        <td>${t.higherIsBetter?'<span class="badge badge-success">Evet</span>':'<span class="badge badge-danger">Hayır</span>'}</td>
+        <td><button class="btn btn-danger btn-xs" onclick="deleteMeasType('${t.id}')">Sil</button></td>
+      </tr>`).join('')}
+      </tbody>
+    </table></div>
+  </div>`;
+}
+
+function openAddMeasTypeModal(){
+  const inner=document.getElementById('modal-generic-inner');
+  inner.innerHTML=`
+  <div class="modal-title">Ölçüm Türü Ekle<button class="modal-close" onclick="closeModal('modal-generic')">✕</button></div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">İsim *</label><input class="form-control" id="mt-name" placeholder="örn: Bench Press"></div>
+    <div class="form-group"><label class="form-label">Birim *</label><input class="form-control" id="mt-unit" placeholder="örn: kg"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Kategori</label><input class="form-control" id="mt-cat" placeholder="örn: Kuvvet"></div>
+    <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:6px">
+      <div class="toggle-wrap">
+        <label class="toggle"><input type="checkbox" id="mt-hib" checked><span class="toggle-slider"></span></label>
+        <span style="font-size:13px;color:var(--text)">Yüksek Daha İyi</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('modal-generic')">İptal</button>
+    <button class="btn btn-accent" onclick="saveMeasType()">Ekle</button>
+  </div>`;
+  showModal('modal-generic');
+}
+
+function saveMeasType(){
+  const name=document.getElementById('mt-name').value.trim();
+  const unit=document.getElementById('mt-unit').value.trim();
+  if(!name||!unit){alert('İsim ve birim zorunludur.');return;}
+  DB.measureTypes.push({id:genId(),name,unit,category:document.getElementById('mt-cat').value.trim(),higherIsBetter:document.getElementById('mt-hib').checked});
+  saveData();closeModal('modal-generic');renderMeasTypes(document.getElementById('meas-tab-content'));
+}
+
+function deleteMeasType(id){
+  const used=DB.measurements.some(m=>m.typeId===id);
+  if(used&&!confirm('Bu tür kullanımda. Silmek tüm bu türün ölçümlerini de siler. Emin misiniz?'))return;
+  else if(!used&&!confirm('Ölçüm türü silinecek?'))return;
+  DB.measureTypes=DB.measureTypes.filter(t=>t.id!==id);
+  DB.measurements=DB.measurements.filter(m=>m.typeId!==id);
+  saveData();renderMeasTypes(document.getElementById('meas-tab-content'));
+}
+
+// ============================================================
+// 6. GOALS
+// ============================================================
+let goalAthleteId='';
+
+function renderGoals(el,actions){
+  actions.innerHTML=`<button class="btn btn-accent" onclick="openAddGoalModal()">+ Hedef Ekle</button>`;
+  el.innerHTML=`
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Sporcu Seç</div>
+    <select class="form-control" id="goal-ath-sel" onchange="goalAthleteId=this.value;renderGoalsList()" style="max-width:300px">
+      <option value="">-- Tüm Sporcular --</option>
+      ${DB.athletes.map(a=>`<option value="${a.id}"${goalAthleteId===a.id?' selected':''}>${escHtml(a.name)} (${escHtml(a.branch)})</option>`).join('')}
+    </select>
+  </div>
+  <div id="goals-list"></div>`;
+  renderGoalsList();
+}
+
+function renderGoalsList(){
+  const el=document.getElementById('goals-list');if(!el)return;
+  let goals=DB.goals;
+  if(goalAthleteId)goals=goals.filter(g=>g.athleteId===goalAthleteId);
+
+  // Auto check achieved/failed
+  goals.forEach(g=>{
+    if(g.status!=='active')return;
+    const mt=getMeasureType(g.typeId);if(!mt)return;
+    const lastM=DB.measurements.filter(m=>m.athleteId===g.athleteId&&m.typeId===g.typeId).sort((a,b)=>b.date.localeCompare(a.date))[0];
+    if(lastM){
+      const cur=lastM.value;
+      if((mt.higherIsBetter&&cur>=g.targetValue)||(!mt.higherIsBetter&&cur<=g.targetValue)){g.status='achieved';saveData();}
+    }
+    if(new Date(g.targetDate)<new Date()&&g.status==='active'){g.status='failed';saveData();}
+  });
+
+  const active=goals.filter(g=>g.status==='active');
+  const done=goals.filter(g=>g.status!=='active');
+
+  let html='';
+  if(!active.length&&!done.length){html='<div class="empty-state"><div class="empty-icon">🎯</div><div class="empty-title">Henüz hedef yok</div></div>';}
+
+  if(active.length){
+    html+=`<div class="section-title" style="margin-bottom:10px">Aktif Hedefler</div>`;
+    html+=active.map(g=>goalCard(g)).join('');
+  }
+  if(done.length){
+    html+=`<details style="margin-top:16px"><summary style="cursor:pointer;color:var(--muted);font-size:13px;font-weight:700;margin-bottom:10px;outline:none">Tamamlanan/Başarısız (${done.length})</summary>
+    <div style="margin-top:10px">${done.map(g=>goalCard(g)).join('')}</div></details>`;
+  }
+  el.innerHTML=html;
+}
+
+function goalCard(g){
+  const a=getAthlete(g.athleteId);const mt=getMeasureType(g.typeId);
+  if(!a||!mt)return'';
+  const lastM=DB.measurements.filter(m=>m.athleteId===g.athleteId&&m.typeId===g.typeId).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const cur=lastM?lastM.value:(g.startValue||0);
+  let pct=0;
+  if(mt.higherIsBetter&&g.targetValue!==g.startValue){pct=Math.max(0,Math.min(100,Math.round((cur-g.startValue)/(g.targetValue-g.startValue)*100)));}
+  else if(!mt.higherIsBetter&&g.startValue!==g.targetValue){pct=Math.max(0,Math.min(100,Math.round((g.startValue-cur)/(g.startValue-g.targetValue)*100)));}
+  if(isNaN(pct))pct=0;
+  const days=Math.ceil((new Date(g.targetDate)-new Date())/86400000);
+  const statusBadge={active:'<span class="badge badge-primary">Aktif</span>',achieved:'<span class="badge badge-success">✅ Başarıldı</span>',failed:'<span class="badge badge-danger">❌ Başarısız</span>'}[g.status]||'';
+  const barClass=g.status==='achieved'?'success':g.status==='failed'?'danger':pct>70?'success':pct>40?'warning':'';
+  return `<div class="goal-item">
+    <div class="goal-header">
+      <div><span class="goal-label">${escHtml(a.name)}</span><span style="color:var(--muted);font-size:12px;margin-left:8px">${escHtml(mt.name)}</span></div>
+      <div style="display:flex;gap:6px;align-items:center">${statusBadge}<button class="btn btn-danger btn-xs" onclick="deleteGoal('${g.id}')">Sil</button></div>
+    </div>
+    <div class="goal-values">Mevcut: <strong>${cur} ${mt.unit}</strong> → Hedef: <strong>${g.targetValue} ${mt.unit}</strong> | Bitiş: ${formatDate(g.targetDate)}</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+      <div class="progress-wrap"><div class="progress-bar ${barClass}" style="width:${pct}%"></div></div>
+      <span style="font-size:12px;color:var(--muted);white-space:nowrap">${pct}%</span>
+      ${g.status==='active'?`<span class="goal-days">${days>0?days+' gün kaldı':'Süre doldu'}</span>`:''}
+    </div>
+    ${g.status==='active'?`<div style="margin-top:8px"><button class="btn btn-success btn-xs" onclick="achieveGoal('${g.id}')">✅ Başarıldı</button></div>`:''}
+  </div>`;
+}
+
+function openAddGoalModal(preAthleteId){
+  const inner=document.getElementById('modal-generic-inner');
+  inner.innerHTML=`
+  <div class="modal-title">Hedef Ekle<button class="modal-close" onclick="closeModal('modal-generic')">✕</button></div>
+  <div class="form-group"><label class="form-label">Sporcu *</label>
+    <select class="form-control" id="gf-athlete">${DB.athletes.map(a=>`<option value="${a.id}"${(preAthleteId||goalAthleteId)===a.id?' selected':''}>${escHtml(a.name)}</option>`).join('')}</select>
+  </div>
+  <div class="form-group"><label class="form-label">Ölçüm Türü *</label>
+    <select class="form-control" id="gf-type">${DB.measureTypes.map(t=>`<option value="${t.id}">${escHtml(t.name)} (${escHtml(t.unit)})</option>`).join('')}</select>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Başlangıç Değeri</label><input type="number" step="any" class="form-control" id="gf-start" placeholder="Mevcut değer"></div>
+    <div class="form-group"><label class="form-label">Hedef Değer *</label><input type="number" step="any" class="form-control" id="gf-target" placeholder="Hedef değer"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Hedef Tarihi *</label><input type="date" class="form-control" id="gf-date"></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('modal-generic')">İptal</button>
+    <button class="btn btn-accent" onclick="saveGoal()">Ekle</button>
+  </div>`;
+  showModal('modal-generic');
+}
+
+function saveGoal(){
+  const athleteId=document.getElementById('gf-athlete').value;
+  const typeId=document.getElementById('gf-type').value;
+  const targetValue=parseFloat(document.getElementById('gf-target').value);
+  const startValue=parseFloat(document.getElementById('gf-start').value)||0;
+  const targetDate=document.getElementById('gf-date').value;
+  if(!athleteId||!typeId||isNaN(targetValue)||!targetDate){alert('Zorunlu alanları doldurun.');return;}
+  DB.goals.push({id:genId(),athleteId,typeId,targetValue,startValue,targetDate,status:'active'});
+  saveData();closeModal('modal-generic');renderGoalsList();
+}
+
+function achieveGoal(id){
+  const g=DB.goals.find(g=>g.id===id);if(g)g.status='achieved';
+  saveData();renderGoalsList();
+}
+
+function deleteGoal(id){
+  if(!confirm('Hedef silinecek?'))return;
+  DB.goals=DB.goals.filter(g=>g.id!==id);
+  saveData();renderGoalsList();
+}
+
+// ============================================================
+// 7. COMPETITIONS
+// ============================================================
+let compAthleteId='';
+let compView='athlete';
+
+function renderCompetitions(el,actions){
+  actions.innerHTML=`<button class="btn btn-accent" onclick="openAddCompModal()">+ Yarışma Ekle</button>`;
+  el.innerHTML=`
+  <div class="tabs">
+    <button class="tab-btn${compView==='athlete'?' active':''}" onclick="compView='athlete';renderCompTab()">Sporcu Bazlı</button>
+    <button class="tab-btn${compView==='all'?' active':''}" onclick="compView='all';renderCompTab()">Tüm Yarışmalar</button>
+  </div>
+  <div id="comp-tab-content"></div>`;
+  renderCompTab();
+}
+
+function renderCompTab(){
+  document.querySelectorAll('#page-content .tab-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active',(i===0&&compView==='athlete')||(i===1&&compView==='all'));
+  });
+  const el=document.getElementById('comp-tab-content');
+  if(compView==='athlete')renderCompAthlete(el);
+  else renderCompAll(el);
+}
+
+function renderCompAthlete(el){
+  let comps=DB.competitions.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  if(compAthleteId)comps=comps.filter(c=>c.athleteId===compAthleteId);
+  el.innerHTML=`
+  <div class="card" style="margin-bottom:16px">
+    <select class="form-control" id="comp-ath-sel" onchange="compAthleteId=this.value;renderCompAthlete(document.getElementById('comp-tab-content'))" style="max-width:300px">
+      <option value="">-- Tüm Sporcular --</option>
+      ${DB.athletes.map(a=>`<option value="${a.id}"${compAthleteId===a.id?' selected':''}>${escHtml(a.name)}</option>`).join('')}
+    </select>
+  </div>
+  ${compTable(comps)}`;
+}
+
+function renderCompAll(el){
+  const comps=DB.competitions.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  el.innerHTML=compTable(comps);
+}
+
+function compTable(comps){
+  if(!comps.length)return'<div class="empty-state"><div class="empty-icon">🏆</div><div class="empty-title">Yarışma kaydı yok</div></div>';
+  function rankBadge(r){
+    if(r===1)return'<span class="medal-1">🥇 1.</span>';
+    if(r===2)return'<span class="medal-2">🥈 2.</span>';
+    if(r===3)return'<span class="medal-3">🥉 3.</span>';
+    return`<span class="medal-other">${r}.</span>`;
+  }
+  return`<div class="card"><div class="table-wrap"><table>
+    <thead><tr><th>Tarih</th><th>Sporcu</th><th>Yarışma</th><th>Kategori</th><th>Sonuç</th><th>Derece</th><th>Notlar</th><th></th></tr></thead>
+    <tbody>${comps.map(c=>{
+      const a=getAthlete(c.athleteId);
+      return`<tr>
+        <td style="white-space:nowrap">${formatDate(c.date)}</td>
+        <td style="white-space:nowrap;font-weight:600">${escHtml(a?a.name:'?')}</td>
+        <td>${escHtml(c.name)}</td>
+        <td><span class="badge badge-muted">${escHtml(c.category||'—')}</span></td>
+        <td>${escHtml(c.result||'—')}</td>
+        <td>${c.rank?rankBadge(parseInt(c.rank)):'—'}</td>
+        <td style="color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(c.notes||'')}</td>
+        <td><button class="btn btn-danger btn-xs" onclick="deleteComp('${c.id}')">Sil</button></td>
+      </tr>`;
+    }).join('')}
+    </tbody>
+  </table></div></div>`;
+}
+
+function openAddCompModal(){
+  const inner=document.getElementById('modal-generic-inner');
+  inner.innerHTML=`
+  <div class="modal-title">Yarışma Ekle<button class="modal-close" onclick="closeModal('modal-generic')">✕</button></div>
+  <div class="form-group"><label class="form-label">Sporcu *</label>
+    <select class="form-control" id="cf-athlete">${DB.athletes.map(a=>`<option value="${a.id}"${compAthleteId===a.id?' selected':''}>${escHtml(a.name)}</option>`).join('')}</select>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Tarih *</label><input type="date" class="form-control" id="cf-date" value="${today()}"></div>
+    <div class="form-group"><label class="form-label">Yarışma Adı *</label><input class="form-control" id="cf-name" placeholder="Türkiye Şampiyonası"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Kategori</label><input class="form-control" id="cf-cat" placeholder="örn: -66kg, Yıldız"></div>
+    <div class="form-group"><label class="form-label">Sonuç</label><input class="form-control" id="cf-result" placeholder="örn: Altın Madalya"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Derece (sayı)</label><input type="number" class="form-control" id="cf-rank" placeholder="1" min="1"></div>
+    <div class="form-group"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Notlar</label><textarea class="form-control" id="cf-notes" placeholder="Ek bilgiler..."></textarea></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('modal-generic')">İptal</button>
+    <button class="btn btn-accent" onclick="saveComp()">Ekle</button>
+  </div>`;
+  showModal('modal-generic');
+}
+
+function saveComp(){
+  const athleteId=document.getElementById('cf-athlete').value;
+  const name=document.getElementById('cf-name').value.trim();
+  const date=document.getElementById('cf-date').value||today();
+  if(!athleteId||!name){alert('Sporcu ve yarışma adı zorunludur.');return;}
+  DB.competitions.push({id:genId(),athleteId,date,name,category:document.getElementById('cf-cat').value.trim(),result:document.getElementById('cf-result').value.trim(),rank:document.getElementById('cf-rank').value?parseInt(document.getElementById('cf-rank').value):null,notes:document.getElementById('cf-notes').value.trim()});
+  saveData();closeModal('modal-generic');renderCompTab();
+}
+
+function deleteComp(id){
+  if(!confirm('Yarışma silinecek?'))return;
+  DB.competitions=DB.competitions.filter(c=>c.id!==id);
+  saveData();renderCompTab();
+}
+
+// ============================================================
+// 8. INJURIES
+// ============================================================
+let injAthleteId='';
+
+function renderInjuries(el,actions){
+  actions.innerHTML=`<button class="btn btn-accent" onclick="openAddInjuryModal()">+ Sakatlık Ekle</button>`;
+  el.innerHTML=`
+  <div class="card" style="margin-bottom:16px">
+    <select class="form-control" id="inj-ath-sel" onchange="injAthleteId=this.value;renderInjList()" style="max-width:300px">
+      <option value="">-- Tüm Sporcular --</option>
+      ${DB.athletes.map(a=>`<option value="${a.id}"${injAthleteId===a.id?' selected':''}>${escHtml(a.name)} (${escHtml(a.branch)})</option>`).join('')}
+    </select>
+  </div>
+  <div id="inj-list"></div>`;
+  renderInjList();
+}
+
+function renderInjList(){
+  const el=document.getElementById('inj-list');if(!el)return;
+  let injuries=DB.injuries.slice().sort((a,b)=>b.startDate.localeCompare(a.startDate));
+  if(injAthleteId)injuries=injuries.filter(i=>i.athleteId===injAthleteId);
+  const active=injuries.filter(i=>i.status==='active');
+  const recovered=injuries.filter(i=>i.status==='recovered');
+
+  let html='';
+  if(!active.length&&!recovered.length){html='<div class="empty-state"><div class="empty-icon">🤕</div><div class="empty-title">Sakatlık kaydı yok</div></div>';}
+
+  if(active.length){
+    html+=`<div class="section-title">Aktif Sakatlıklar</div>`;
+    html+=active.map(inj=>injCard(inj,true)).join('');
+  }
+  if(recovered.length){
+    html+=`<details${!active.length?' open':''}><summary style="cursor:pointer;color:var(--muted);font-size:13px;font-weight:700;margin:14px 0 10px;outline:none">İyileşmiş Sakatlıklar (${recovered.length})</summary>
+    <div style="margin-top:10px">${recovered.map(inj=>injCard(inj,false)).join('')}</div></details>`;
+  }
+  el.innerHTML=html;
+}
+
+function injCard(inj,active){
+  const a=getAthlete(inj.athleteId);
+  const days=active?Math.ceil((new Date()-new Date(inj.startDate))/86400000):null;
+  return`<div class="injury-card">
+    <div class="injury-header">
+      <div style="display:flex;align-items:center;gap:10px">
+        ${a?avatarHtml(a,'sm'):''}
+        <div>
+          <div class="injury-title">${escHtml(a?a.name:'?')} - ${escHtml(inj.bodyPart)}</div>
+          <div class="injury-dates">Başlangıç: ${formatDate(inj.startDate)}${inj.endDate?' | Bitiş: '+formatDate(inj.endDate):''}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        ${active?'<span class="badge badge-danger">Aktif</span>':'<span class="badge badge-success">İyileşti</span>'}
+        ${active?`<button class="btn btn-success btn-xs" onclick="recoverInjury('${inj.id}')">İyileşti</button>`:''}
+        <button class="btn btn-danger btn-xs" onclick="deleteInjury('${inj.id}')">Sil</button>
+      </div>
+    </div>
+    <div class="injury-desc">${escHtml(inj.description||'')}</div>
+    ${active&&days?`<div style="font-size:11px;color:var(--warning);margin-top:6px">⏱️ ${days} gündür aktif</div>`:''}
+  </div>`;
+}
+
+function openAddInjuryModal(){
+  const inner=document.getElementById('modal-generic-inner');
+  inner.innerHTML=`
+  <div class="modal-title">Sakatlık Ekle<button class="modal-close" onclick="closeModal('modal-generic')">✕</button></div>
+  <div class="form-group"><label class="form-label">Sporcu *</label>
+    <select class="form-control" id="if-athlete">${DB.athletes.map(a=>`<option value="${a.id}"${injAthleteId===a.id?' selected':''}>${escHtml(a.name)}</option>`).join('')}</select>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Vücut Bölgesi *</label><input class="form-control" id="if-body" placeholder="örn: Sol Diz, Omuz"></div>
+    <div class="form-group"><label class="form-label">Başlangıç Tarihi *</label><input type="date" class="form-control" id="if-start" value="${today()}"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Açıklama</label><textarea class="form-control" id="if-desc" placeholder="Sakatlığın açıklaması..."></textarea></div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal('modal-generic')">İptal</button>
+    <button class="btn btn-accent" onclick="saveInjury()">Ekle</button>
+  </div>`;
+  showModal('modal-generic');
+}
+
+function saveInjury(){
+  const athleteId=document.getElementById('if-athlete').value;
+  const bodyPart=document.getElementById('if-body').value.trim();
+  const startDate=document.getElementById('if-start').value||today();
+  if(!athleteId||!bodyPart){alert('Sporcu ve vücut bölgesi zorunludur.');return;}
+  DB.injuries.push({id:genId(),athleteId,bodyPart,startDate,endDate:null,description:document.getElementById('if-desc').value.trim(),status:'active'});
+  saveData();closeModal('modal-generic');renderInjList();renderSidebar();
+}
+
+function recoverInjury(id){
+  const inj=DB.injuries.find(i=>i.id===id);
+  if(inj){inj.status='recovered';inj.endDate=today();}
+  saveData();renderInjList();renderSidebar();
+}
+
+function deleteInjury(id){
+  if(!confirm('Sakatlık kaydı silinecek?'))return;
+  DB.injuries=DB.injuries.filter(i=>i.id!==id);
+  saveData();renderInjList();renderSidebar();
+}
+
+// ============================================================
+// 9. REPORTS
+// ============================================================
+function renderReports(el,actions){
+  actions.innerHTML=`<button class="btn btn-ghost" onclick="alert('Export özelliği yakında eklenecek.')">📥 Dışa Aktar</button>`;
+  el.innerHTML=`
+  <div class="grid-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">📅 Son 30 Gün Yoklama</div>
+      <div class="chart-wrap"><canvas id="rep-att-line" height="220"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏅 Branş Bazlı Yoklama</div>
+      <div class="chart-wrap"><canvas id="rep-branch-bar" height="220"></canvas></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🥇 En Yüksek Katılım (Top 10)</div>
+      <div class="chart-wrap"><canvas id="rep-top-att" height="220"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏆 Yarışma Başarıları - Branş Bazlı</div>
+      <div class="chart-wrap"><canvas id="rep-comp-branch" height="220"></canvas></div>
+    </div>
+  </div>`;
+
+  setTimeout(()=>{
+    renderRepAttLine();
+    renderRepBranchBar();
+    renderRepTopAtt();
+    renderRepCompBranch();
+  },50);
+}
+
+function renderRepAttLine(){
+  const ctx=document.getElementById('rep-att-line');if(!ctx)return;
+  const dates=[];const d=new Date();
+  for(let i=29;i>=0;i--){const dd=new Date(d);dd.setDate(dd.getDate()-i);dates.push(dd.toISOString().split('T')[0]);}
+  const active=DB.athletes.filter(a=>a.active);
+  const data=dates.map(date=>{
+    if(!active.length)return 0;
+    const recs=DB.attendance.filter(a=>a.date===date&&active.find(at=>at.id===a.athleteId));
+    if(!recs.length)return null;
+    return Math.round(recs.filter(r=>r.present).length/active.length*100);
+  });
+  destroyChart('rep-att-line');
+  window.appCharts['rep-att-line']=new Chart(ctx,{
+    type:'line',
+    data:{labels:dates.map(d=>d.slice(5)),datasets:[{label:'Katılım %',data,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.1)',borderWidth:2,tension:.3,fill:true,spanGaps:true,pointRadius:3,pointBackgroundColor:'#f0c040'}]},
+    options:{...chartDefaults(),scales:darkScales()}
+  });
+}
+
+function renderRepBranchBar(){
+  const ctx=document.getElementById('rep-branch-bar');if(!ctx)return;
+  const endD=new Date();const startD=new Date();startD.setDate(startD.getDate()-30);
+  const data=BRANCHES.map(b=>{
+    const bathletes=DB.athletes.filter(a=>a.active&&a.branch===b);
+    if(!bathletes.length)return null;
+    const recs=DB.attendance.filter(a=>bathletes.find(at=>at.id===a.athleteId)&&new Date(a.date)>=startD&&new Date(a.date)<=endD);
+    if(!recs.length)return null;
+    return{branch:b,pct:Math.round(recs.filter(r=>r.present).length/recs.length*100)};
+  }).filter(Boolean);
+  if(!data.length){ctx.parentElement.innerHTML='<div class="empty-state" style="padding:30px"><div class="empty-icon">📊</div><div>Yeterli veri yok</div></div>';return;}
+  destroyChart('rep-branch-bar');
+  window.appCharts['rep-branch-bar']=new Chart(ctx,{
+    type:'bar',
+    data:{labels:data.map(d=>d.branch),datasets:[{label:'Katılım %',data:data.map(d=>d.pct),backgroundColor:CHART_COLORS,borderRadius:6}]},
+    options:{...chartDefaults(),indexAxis:'y',scales:{x:{...darkScales().x,min:0,max:100,ticks:{...darkScales().x.ticks,callback:v=>v+'%'}},y:darkScales().y}}
+  });
+}
+
+function renderRepTopAtt(){
+  const ctx=document.getElementById('rep-top-att');if(!ctx)return;
+  const athletes=DB.athletes.filter(a=>a.active).map(a=>{
+    const r=getAttRate(a.id,30);
+    return{name:a.name,rate:r!==null?r:0};
+  }).sort((a,b)=>b.rate-a.rate).slice(0,10);
+  if(!athletes.length){ctx.parentElement.innerHTML='<div class="empty-state" style="padding:30px"><div class="empty-icon">🏃</div><div>Yeterli veri yok</div></div>';return;}
+  destroyChart('rep-top-att');
+  window.appCharts['rep-top-att']=new Chart(ctx,{
+    type:'bar',
+    data:{labels:athletes.map(a=>a.name),datasets:[{label:'Katılım % (30 gün)',data:athletes.map(a=>a.rate),backgroundColor:athletes.map((a,i)=>CHART_COLORS[i%CHART_COLORS.length]),borderRadius:6}]},
+    options:{...chartDefaults(),scales:{x:{...darkScales().x,ticks:{...darkScales().x.ticks,maxRotation:30}},y:{...darkScales().y,min:0,max:100,ticks:{...darkScales().y.ticks,callback:v=>v+'%'}}}}
+  });
+}
+
+function renderRepCompBranch(){
+  const ctx=document.getElementById('rep-comp-branch');if(!ctx)return;
+  const data=BRANCHES.map(b=>{
+    const athletes=DB.athletes.filter(a=>a.branch===b).map(a=>a.id);
+    const comps=DB.competitions.filter(c=>athletes.includes(c.athleteId));
+    const gold=comps.filter(c=>c.rank===1).length;
+    const silver=comps.filter(c=>c.rank===2).length;
+    const bronze=comps.filter(c=>c.rank===3).length;
+    const other=comps.filter(c=>c.rank&&c.rank>3).length;
+    if(!comps.length)return null;
+    return{branch:b,gold,silver,bronze,other};
+  }).filter(Boolean);
+  if(!data.length){ctx.parentElement.innerHTML='<div class="empty-state" style="padding:30px"><div class="empty-icon">🏆</div><div>Yarışma verisi yok</div></div>';return;}
+  destroyChart('rep-comp-branch');
+  window.appCharts['rep-comp-branch']=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:data.map(d=>d.branch),
+      datasets:[
+        {label:'Altın',data:data.map(d=>d.gold),backgroundColor:'#FFD700',borderRadius:4},
+        {label:'Gümüş',data:data.map(d=>d.silver),backgroundColor:'#C0C0C0',borderRadius:4},
+        {label:'Bronz',data:data.map(d=>d.bronze),backgroundColor:'#CD7F32',borderRadius:4},
+        {label:'Diğer',data:data.map(d=>d.other),backgroundColor:'#64748b',borderRadius:4},
+      ]
+    },
+    options:{...chartDefaults(),scales:darkScales()}
+  });
+}
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function showModal(id){
+  document.getElementById(id).classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow='';
+}
+
+// Close modals on overlay click
+['modal-athlete','modal-detail','modal-generic'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',function(e){
+    if(e.target===this)closeModal(id);
+  });
+});
+
+// ESC key
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    ['modal-athlete','modal-detail','modal-generic'].forEach(id=>closeModal(id));
+  }
+});
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  renderSidebar();
+  navigateTo('dashboard');
+}
+
+init();
+</script>
+</body>
+</html>
