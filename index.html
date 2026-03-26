@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DPÜ Spor Kulübü – Dumlupınar Üniversitesi | Kütahya</title>
-    <meta name="description" content="Dumlupınar Üniversitesi Spor Kulübü – Kütahya'da yüzme, basketbol, voleybol, tenis, masa tenisi, pilates, jimnastik ve zumba branşlarında profesyonel spor eğitimi.">
+    <meta name="description" content="Dumlupınar Üniversitesi Spor Kulübü – Kütahya'da yüzme, basketbol, voleybol, tenis, masa tenisi, pilates, jimnastik ve zumba branşlarında profesyonel beden eğitimi ve spor.">
     <meta name="keywords" content="DPÜ Spor Kulübü, Dumlupınar Üniversitesi spor, Kütahya yüzme, Kütahya basketbol, Kütahya voleybol, DPUSK, Kütahya spor kulübü">
     <meta name="author" content="DPÜ Spor Kulübü">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://dpu-spor-kulub.vercel.app/">
     <!-- Open Graph (WhatsApp, Facebook paylaşım önizlemesi) -->
     <meta property="og:title" content="DPÜ Spor Kulübü – Dumlupınar Üniversitesi">
-    <meta property="og:description" content="Kütahya'da 8 branşta profesyonel spor eğitimi. Yüzme, basketbol, voleybol, tenis ve daha fazlası.">
+    <meta property="og:description" content="Kütahya'da 8 branşta profesyonel beden eğitimi ve spor. Yüzme, basketbol, voleybol, tenis ve daha fazlası.">
     <meta property="og:image" content="https://dpu-spor-kulub.vercel.app/yuzme1.jpg">
     <meta property="og:url" content="https://dpu-spor-kulub.vercel.app/">
     <meta property="og:type" content="website">
@@ -24,8 +24,8 @@
         :root{
             --navy:#0d1b3e;
             --navy2:#1a3a6e;
-            --red:#06b6d4;
-            --red2:#0891b2;
+            --red:#c8102e;
+            --red2:#a30e26;
             --gold:#f0c040;
             --white:#fff;
             --light:#f4f6f9;
@@ -107,8 +107,9 @@
             transition:.3s;
         }
         .nav-brand:hover .nav-brand-logo{filter:drop-shadow(0 0 14px rgba(240,192,64,.7));transform:scale(1.06);}
-        .nav-brand-text{color:#fff;font-weight:800;font-size:1rem;line-height:1.2;}
-        .nav-brand-text small{display:block;font-size:.58rem;color:var(--gold);font-weight:500;letter-spacing:2.5px;text-transform:uppercase;}
+        .nav-brand-text{color:#fff;font-weight:800;font-size:.95rem;line-height:1.25;}
+        .nav-brand-text .nav-uni{display:block;font-size:.92rem;font-weight:700;color:#fff;letter-spacing:.3px;}
+        .nav-brand-text .nav-kulup{display:block;font-size:.6rem;color:var(--gold);font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-top:1px;}
         .nav-links{display:flex;gap:0;list-style:none;}
         .nav-links a{
             color:rgba(255,255,255,.7);text-decoration:none;font-size:.8rem;font-weight:500;
@@ -121,8 +122,8 @@
         .nav-kayit{
             display:flex;align-items:center;gap:.4rem;
             background:linear-gradient(135deg,var(--gold),#e6a800);
-            color:var(--navy)!important;font-size:.78rem;font-weight:800;
-            text-decoration:none;padding:.42rem 1.1rem;border-radius:20px;transition:.2s;
+            color:var(--navy)!important;font-size:.85rem;font-weight:800;
+            text-decoration:none;padding:.55rem 1.4rem;border-radius:20px;transition:.2s;
             letter-spacing:.3px;box-shadow:0 2px 12px rgba(240,192,64,.35);
         }
         .nav-kayit:hover{background:linear-gradient(135deg,#fff,#f0e0a0);transform:scale(1.05);box-shadow:0 4px 20px rgba(240,192,64,.5);}
@@ -382,8 +383,20 @@
         .ticker-track{display:flex;gap:0;white-space:nowrap;animation:tickerScroll 30s linear infinite;}
         .ticker-track:hover{animation-play-state:paused;}
         @keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
-        .ticker-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 2.5rem;color:rgba(255,255,255,.9);font-size:.82rem;font-weight:600;letter-spacing:.5px;}
+        .ticker-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 2.5rem;color:rgba(255,255,255,.9);font-size:.82rem;font-weight:600;letter-spacing:.5px;text-decoration:none;transition:color .2s;}
+        .ticker-item:hover{color:var(--gold);}
         .ticker-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;flex-shrink:0;}
+        /* SBF tooltip */
+        .sbf-kisa{position:relative;cursor:default;}
+        .sbf-kisa .sbf-acik{
+            visibility:hidden;opacity:0;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+            background:var(--navy);color:#fff;font-size:.68rem;font-weight:600;white-space:nowrap;
+            padding:.3rem .7rem;border-radius:6px;pointer-events:none;
+            transition:opacity .2s,visibility .2s;
+            border:1px solid rgba(255,255,255,.15);
+        }
+        .sbf-kisa .sbf-acik::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--navy);}
+        .sbf-kisa:hover .sbf-acik{visibility:visible;opacity:1;}
 
         /* ── BRANŞLAR ── */
         #branslar{background:#fff;}
@@ -565,6 +578,8 @@
         .sosyal-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(6,182,212,.4);}
         .map-wrap{margin-top:2rem;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.1);}
         .map-wrap iframe{width:100%;height:260px;border:none;display:block;}
+        .maps-link{display:block;text-align:center;margin-top:.7rem;background:var(--navy);color:#fff;padding:.6rem 1.2rem;border-radius:10px;font-size:.82rem;font-weight:700;text-decoration:none;transition:.2s;}
+        .maps-link:hover{background:var(--red);}
         .form-box{background:var(--navy);border-radius:20px;padding:2.5rem;box-shadow:0 8px 30px rgba(0,0,0,.2);}
         .form-box h3{font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:1.8rem;}
         .form-group{margin-bottom:1.1rem;}
@@ -805,8 +820,8 @@
     <a href="#hero" class="nav-brand">
         <img src="images/kurumsal amblem.png" alt="DPÜ Spor Kulübü" class="nav-brand-logo">
         <div class="nav-brand-text">
-            DPÜ Spor Kulübü
-            <small>DUMLUPINAR ÜNİVERSİTESİ</small>
+            <span class="nav-uni">Dumlupınar Üniversitesi</span>
+            <span class="nav-kulup">SPOR KULÜBÜ</span>
         </div>
     </a>
     <ul class="nav-links" id="navLinks">
@@ -847,7 +862,7 @@
         </div>
         <div class="hero-logo"><img src="images/porsuk amblem .webp" alt="DPÜ Spor Kulübü" style="width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;"></div>
         <h1 class="hero-title">Dumlupınar Üniversitesi<br><span class="accent">Spor Kulübü</span></h1>
-        <p class="hero-slogan">Uygun fiyatlı, kaliteli ve bilimsel spor eğitimi — Kütahya'nın en köklü kulübü</p>
+        <p class="hero-slogan">Herkes için akademik ve bilimsel temelli beden eğitimi ve spor</p>
         <div class="hero-stats">
             <div class="stat-item">
                 <span class="stat-num" data-target="8">0</span>
@@ -880,18 +895,18 @@
 <!-- KAYAN BANT -->
 <div class="ticker-wrap">
     <div class="ticker-track">
-        <span class="ticker-item"><span class="ticker-dot"></span>🎉 23 Nisan Bayram Etkinliği – 23 Nisan Çarşamba</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>🏊 Yüzme – Yeni Başlangıç Grubu Açıldı</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>📋 2025 Bahar Dönemi Kayıtları Devam Ediyor</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>🏀 Basketbol – Haftalık Antrenmanlar Cuma &amp; Hafta Sonu</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>🧘 Pilates Reformer Sınıfları – Kontenjan Dolmadan Kayıt Ol!</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>📞 Bilgi için: 0538 073 88 64</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>🎉 23 Nisan Bayram Etkinliği – 23 Nisan Çarşamba</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>🏊 Yüzme – Yeni Başlangıç Grubu Açıldı</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>📋 2025 Bahar Dönemi Kayıtları Devam Ediyor</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>🏀 Basketbol – Haftalık Antrenmanlar Cuma &amp; Hafta Sonu</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>🧘 Pilates Reformer Sınıfları – Kontenjan Dolmadan Kayıt Ol!</span>
-        <span class="ticker-item"><span class="ticker-dot"></span>📞 Bilgi için: 0538 073 88 64</span>
+        <a href="#takvim" class="ticker-item"><span class="ticker-dot"></span>🎉 23 Nisan Bayram Etkinliği – 23 Nisan Çarşamba</a>
+        <a href="#branslar" class="ticker-item"><span class="ticker-dot"></span>🏊 Yüzme – Yeni Başlangıç Grubu Açıldı</a>
+        <a href="#iletisim" class="ticker-item"><span class="ticker-dot"></span>📋 2025 Bahar Dönemi Kayıtları Devam Ediyor</a>
+        <a href="#branslar" class="ticker-item"><span class="ticker-dot"></span>🏀 Basketbol – Haftalık Antrenmanlar Cuma &amp; Hafta Sonu</a>
+        <a href="#branslar" class="ticker-item"><span class="ticker-dot"></span>🧘 Pilates Reformer Sınıfları – Kontenjan Dolmadan Kayıt Ol!</a>
+        <a href="#iletisim" class="ticker-item"><span class="ticker-dot"></span>📞 Bilgi için: 0538 073 88 64</a>
+        <a href="#takvim" class="ticker-item"><span class="ticker-dot"></span>🎉 23 Nisan Bayram Etkinliği – 23 Nisan Çarşamba</a>
+        <a href="#branslar" class="ticker-item"><span class="ticker-dot"></span>🏊 Yüzme – Yeni Başlangıç Grubu Açıldı</a>
+        <a href="#iletisim" class="ticker-item"><span class="ticker-dot"></span>📋 2025 Bahar Dönemi Kayıtları Devam Ediyor</a>
+        <a href="#branslar" class="ticker-item"><span class="ticker-dot"></span>🏀 Basketbol – Haftalık Antrenmanlar Cuma &amp; Hafta Sonu</a>
+        <a href="#branslar" class="ticker-item"><span class="ticker-dot"></span>🧘 Pilates Reformer Sınıfları – Kontenjan Dolmadan Kayıt Ol!</a>
+        <a href="#iletisim" class="ticker-item"><span class="ticker-dot"></span>📞 Bilgi için: 0538 073 88 64</a>
     </div>
 </div>
 
@@ -909,25 +924,25 @@
                     <img src="images/takim-foto.jpg" alt="DPÜ Spor Kulübü Takım" class="acm-bg" loading="lazy">
                     <div class="card-circle"><img src="images/kurumsal amblem.png" alt="DPÜ" style="width:100%;height:100%;object-fit:contain;border-radius:50%;"></div>
                     <h3>DPÜ Spor Kulübü</h3>
-                    <p>Dumlupınar Üniversitesi Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde, Kütahya'nın en kapsamlı spor eğitim merkezi.</p>
+                    <p>Dumlupınar Üniversitesi Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde, Kütahya'nın en kapsamlı beden eğitimi ve spor merkezi.</p>
                 </div>
                 <div class="about-minis">
                     <div class="mini"><div class="ico">🏅</div><strong>8</strong><span>Aktif Branş</span></div>
                     <div class="mini"><div class="ico">👨‍🏫</div><strong>Uzman</strong><span>Antrenörler</span></div>
                     <div class="mini"><div class="ico">📍</div><strong>DPÜ</strong><span>Kampüs İçi</span></div>
-                    <div class="mini"><div class="ico">🎓</div><strong>SBF</strong><span>Akademik Destek</span></div>
+                    <div class="mini"><div class="ico">🎓</div><strong class="sbf-kisa">SBF<span class="sbf-acik">Spor Bilimleri Fakültesi</span></strong><span>Akademik Destek</span></div>
                 </div>
             </div>
             <div class="about-right reveal">
                 <h2>Sporda <span class="accent">Mükemmelliği</span><br>Birlikte Yaşıyoruz</h2>
-                <p>Dumlupınar Üniversitesi Spor Kulübü olarak, Kütahya'da yaşayan herkese kaliteli spor eğitimi sunmak için faaliyet gösteriyoruz. Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde, uzman antrenörlerimizle 8 farklı branşta eğitim veriyoruz.</p>
+                <p>Dumlupınar Üniversitesi Spor Kulübü olarak, herkese kaliteli beden eğitimi ve spor sunmak için faaliyet gösteriyoruz. Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde, uzman antrenörlerimizle 8 farklı branşta eğitim veriyoruz.</p>
                 <p>Çocuklardan yetişkinlere kadar geniş bir yaş yelpazesine hitap eden programlarımızla, bireylerin hem fiziksel hem de zihinsel gelişimine katkı sağlamayı amaçlıyoruz.</p>
                 <ul class="feat-list">
                     <li><div class="feat-check">✓</div>Spor Bilimleri Fakültesi akademisyenlerinin gözetimi</li>
                     <li><div class="feat-check">✓</div>8 farklı branşta uzman antrenör kadrosu</li>
                     <li><div class="feat-check">✓</div>Çocuklardan yetişkinlere tüm yaş grupları</li>
                     <li><div class="feat-check">✓</div>Modern tesisler ve profesyonel ekipmanlar</li>
-                    <li><div class="feat-check">✓</div>Uygun fiyatlı, kaliteli spor eğitimi</li>
+                    <li><div class="feat-check">✓</div>Uygun fiyatlı, kaliteli beden eğitimi ve spor</li>
                 </ul>
             </div>
         </div>
@@ -948,28 +963,28 @@
                     <div class="t-dot"></div>
                     <div class="t-box">
                         <div class="t-year">1994</div>
-                        <div class="t-desc">DPÜ Spor Kulübü faaliyetlerine başladı. Üniversite bünyesinde öğrencilere ve Kütahya halkına spor imkânı sunuldu.</div>
+                        <div class="t-desc">DPÜ Beden Eğitimi Spor Kulübü kuruldu. Başta futbol olmak üzere birçok branşta yarışmacı faaliyetlere katılım sağlandı.</div>
                     </div>
                 </div>
                 <div class="t-item reveal">
                     <div class="t-dot"></div>
                     <div class="t-box">
-                        <div class="t-year">2000'ler</div>
-                        <div class="t-desc">Branş sayısı artırıldı, profesyonel antrenör kadrosu oluşturuldu. Yüzme, basketbol ve voleybol öne çıkan branşlar haline geldi.</div>
+                        <div class="t-year">1994–2022</div>
+                        <div class="t-desc">Kulüp, futbol ağırlıklı yarışmacı kimliğini koruyarak ligler ve turnuvalarda Dumlupınar Üniversitesi'ni temsil etti.</div>
                     </div>
                 </div>
                 <div class="t-item reveal">
                     <div class="t-dot"></div>
                     <div class="t-box">
-                        <div class="t-year">2010'lar</div>
-                        <div class="t-desc">Spor Bilimleri Fakültesi'nin akademik desteğiyle kulüp bilimsel bir zemine oturtuldu. Altyapı ve çocuk sporuna odaklanıldı.</div>
+                        <div class="t-year">2022</div>
+                        <div class="t-desc">Vizyon değişikliğiyle birlikte kulüp, yarışmacı spor anlayışından altyapı ve topluma yönelik beden eğitimi ve spora odaklandı.</div>
                     </div>
                 </div>
                 <div class="t-item reveal">
                     <div class="t-dot"></div>
                     <div class="t-box">
                         <div class="t-year">Bugün</div>
-                        <div class="t-desc">8 branş, 1000+ sporcu ve 30 yıllık deneyimle Kütahya'nın en köklü ve en kapsamlı spor kulübü olma unvanını taşıyoruz.</div>
+                        <div class="t-desc">Yüzme, basketbol, voleybol, tenis, masa tenisi, pilates, zumba ve jimnastik branşlarında uzman antrenör kadrosuyla Kütahya'ya hizmet veriyoruz.</div>
                     </div>
                 </div>
             </div>
@@ -984,12 +999,12 @@
                 <div class="vm-card reveal">
                     <div class="vm-ico">🎯</div>
                     <h3>Vizyonumuz</h3>
-                    <p>Türkiye'nin en örnek üniversite spor kulüplerinden biri olmak; akademik bilgiyi sporla buluşturan, ulusal ve uluslararası alanda tanınan, Kütahya'nın spor markası haline gelmek.</p>
+                    <p>Akademik bilgiyi sporla buluşturan, ulusal ve uluslararası alanda tanınan, Kütahya'nın spor markası bir üniversite kulübü olmak.</p>
                 </div>
                 <div class="vm-card misyon reveal">
                     <div class="vm-ico">💡</div>
                     <h3>Misyonumuz</h3>
-                    <p>Her yaştan bireye bilimsel temelli, güvenli ve erişilebilir spor eğitimi sunmak; sporun sağlıklı yaşamın ayrılmaz bir parçası olduğunu topluma benimsetmek ve Kütahya'da spor kültürünü yaygınlaştırmak.</p>
+                    <p>Her yaştan bireye bilimsel temelli, güvenli ve erişilebilir beden eğitimi ve spor sunmak; sporun sağlıklı yaşamın ayrılmaz bir parçası olduğunu topluma benimsetmek ve Kütahya'da spor kültürünü yaygınlaştırmak.</p>
                 </div>
                 <div class="vm-card reveal" style="border-top-color:#27ae60;">
                     <div class="vm-ico">🏆</div>
@@ -999,7 +1014,7 @@
                 <div class="vm-card reveal" style="border-top-color:#8e44ad;">
                     <div class="vm-ico">🌱</div>
                     <h3>Altyapı Felsefemiz</h3>
-                    <p>Geleceğin sporcuları bugünün çocukları. Erken yaşta spora başlamanın fiziksel ve zihinsel gelişime katkısına inanıyor, altyapı çalışmalarını en öncelikli hedefimiz olarak görüyoruz.</p>
+                    <p>Geleceğin sporcuları bugünün çocukları. Erken yaşta spora başlamanın fiziksel ve zihinsel gelişime katkısına inanıyor, altyapı çalışmalarını en öncelikli hedefimiz olarak görüyoruz. Altyapımızda yetiştirdiğimiz genç sporcuları geleceğin başarılı isimleri olarak görüyor, her birinin potansiyelini en üst düzeye taşımayı amaçlıyoruz.</p>
                 </div>
             </div>
         </div>
@@ -1022,7 +1037,7 @@
                 <div class="brans-body">
                     <p>Olimpik havuzda profesyonel yüzme eğitimi. Çocuklar ve yetişkinler için ayrı programlarla temel tekniklerden ileri antrenmanlarına kadar.</p>
                     <div class="brans-info">
-                        <div class="binfo"><div class="binfo-ic">👶</div>Tüm yaş grupları</div>
+                        <div class="binfo"><div class="binfo-ic">👶</div>5 yaş ve üzeri</div>
                         <div class="binfo"><div class="binfo-ic">📍</div>DPÜ Yüzme Havuzu</div>
                     </div>
                     <div class="brans-foot">
@@ -1142,17 +1157,17 @@
         <div style="max-width:860px;margin:0 auto;display:flex;gap:3rem;align-items:center;flex-wrap:wrap;">
             <div style="flex-shrink:0;text-align:center;">
                 <div style="width:150px;height:150px;border-radius:50%;border:4px solid #f0c040;overflow:hidden;margin:0 auto;">
-                    <img src="images/baskan.jpg" alt="Doç. Dr. Osman Tolga Şinoforoğlu"
+                    <img src="images/baskan.jpg" alt="Doç. Dr. Tolga Şinoforoğlu"
                         style="width:100%;height:100%;object-fit:cover;object-position:center top;"
                         onerror="this.style.display='none';this.parentElement.style.background='#1a3a6e';this.parentElement.innerHTML+='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;font-size:4rem;\'>👨‍💼</div>'">
                 </div>
                 <div style="color:#f0c040;font-size:.75rem;font-weight:800;letter-spacing:2px;margin-top:1rem;text-transform:uppercase;">Başkan</div>
-                <div style="color:white;font-weight:700;margin-top:.3rem;font-size:.95rem;">Doç. Dr. Osman Tolga Şinoforoğlu</div>
+                <div style="color:white;font-weight:700;margin-top:.3rem;font-size:.95rem;">Doç. Dr. Tolga Şinoforoğlu</div>
             </div>
             <div style="flex:1;min-width:280px;">
                 <div style="color:#f0c040;font-size:.8rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem;">Başkanımızın Mesajı</div>
                 <blockquote style="color:rgba(255,255,255,.92);font-size:1.05rem;line-height:1.9;font-style:italic;border-left:3px solid #f0c040;padding-left:1.5rem;margin:0;">
-                    "Dumlupınar Üniversitesi Spor Kulübü olarak amacımız; sporun sadece bir aktivite değil, bir yaşam biçimi olduğunu gençlerimize ve topluma göstermektir. Her branşta bilimsel temelli antrenman programlarıyla sporcularımızın hem fiziksel hem de kişisel gelişimlerine katkı sağlıyoruz. Kütahya'mıza ve ülkemize değer katacak nesiller yetiştirmek en büyük motivasyonumuz."
+                    "Dumlupınar Üniversitesi Spor Kulübü olarak amacımız; sporun sadece bir aktivite değil, bir yaşam biçimi olduğunu çocuklarımıza, gençlerimize ve topluma göstermektir. Her branşta bilimsel temelli beden eğitimi ve spor programlarıyla sporcularımızın hem fiziksel hem de kişisel gelişimlerine katkı sağlıyoruz. Kütahya'mıza ve ülkemize değer katacak nesiller yetiştirmek en büyük motivasyonumuz."
                 </blockquote>
             </div>
         </div>
@@ -1171,16 +1186,16 @@
         <div style="margin-bottom:2.5rem;">
             <div class="antrenor-card reveal" style="max-width:400px;margin:0 auto;border:3px solid var(--gold);">
                 <div class="antrenor-avatar bg2" style="height:240px;position:relative;overflow:hidden;">
-                    <img src="images/baskan.jpg" alt="Doç. Dr. Osman Tolga Şinoforoğlu"
+                    <img src="images/baskan.jpg" alt="Doç. Dr. Tolga Şinoforoğlu"
                         style="width:100%;height:100%;object-fit:cover;object-position:center top;"
                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
                     <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:5rem;">👨‍💼</div>
                 </div>
                 <div class="antrenor-body">
                     <div style="display:inline-block;background:var(--gold);color:var(--navy);font-size:.65rem;font-weight:800;padding:.25rem .8rem;border-radius:20px;margin-bottom:.5rem;letter-spacing:1px;">BAŞKAN</div>
-                    <h3 style="font-size:1.1rem;">Doç. Dr. Osman Tolga Şinoforoğlu</h3>
+                    <h3 style="font-size:1.1rem;">Doç. Dr. Tolga Şinoforoğlu</h3>
                     <div class="branch">Dumlupınar Üniversitesi Spor Kulübü</div>
-                    <p>DPÜ Spor Bilimleri Fakültesi öğretim üyesi. Kulübümüzün başkanı olarak tüm branşları akademik düzeyde yönetmektedir.</p>
+                    <p>DPÜ Spor Bilimleri Fakültesi öğretim üyesi, Antrenörlük Eğitimi Bölüm Başkanı. Kulübümüzün başkanı olarak tüm branşları akademik düzeyde yönetmektedir.</p>
                 </div>
             </div>
         </div>
@@ -1193,10 +1208,12 @@
                 <div class="antrenor-brans-header abh-yuzme">🏊 Yüzme</div>
                 <div class="antrenor-list">
                     <div class="antrenor-row"><span class="antrenor-row-name">Gizem Yerlikaya</span><span class="antrenor-row-role">Baş Antrenör</span></div>
-                    <div class="antrenor-row"><span class="antrenor-row-name">Enes Tezyaparlar</span><span class="antrenor-row-role">Antrenör</span></div>
                     <div class="antrenor-row"><span class="antrenor-row-name">Eren Hüseyin Işık</span><span class="antrenor-row-role">Antrenör</span></div>
                     <div class="antrenor-row"><span class="antrenor-row-name">Gözde Sönmez</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Ahmet Hamdi Bayraktar</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Boğaçhan Yıldırım</span><span class="antrenor-row-role">Antrenör</span></div>
                     <div class="antrenor-row"><span class="antrenor-row-name">Taha Yamaner</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Enes Tezyaparlar</span><span class="antrenor-row-role">Antrenör</span></div>
                 </div>
             </div>
 
@@ -1224,10 +1241,10 @@
                 <div class="antrenor-brans-header abh-tenis">🎾 Tenis</div>
                 <div class="antrenor-list">
                     <div class="antrenor-row"><span class="antrenor-row-name">Metin Dut</span><span class="antrenor-row-role">Baş Antrenör</span></div>
-                    <div class="antrenor-row"><span class="antrenor-row-name">Çağatay Ayyıldız</span><span class="antrenor-row-role">Antrenör</span></div>
-                    <div class="antrenor-row"><span class="antrenor-row-name">Doğukan Bilici</span><span class="antrenor-row-role">Antrenör</span></div>
-                    <div class="antrenor-row"><span class="antrenor-row-name">Eylül Beste Zeren</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Çağatay Ayyıldız</span><span class="antrenor-row-role">Baş Antrenör</span></div>
                     <div class="antrenor-row"><span class="antrenor-row-name">Furkan Bilir</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Eylül Beste Zeren</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Doğukan Bilici</span><span class="antrenor-row-role">Antrenör</span></div>
                 </div>
             </div>
 
@@ -1236,9 +1253,10 @@
                 <div class="antrenor-brans-header abh-jimnas">🤸 Jimnastik</div>
                 <div class="antrenor-list">
                     <div class="antrenor-row"><span class="antrenor-row-name">Ömer Ozanalp</span><span class="antrenor-row-role">Baş Antrenör</span></div>
-                    <div class="antrenor-row"><span class="antrenor-row-name">Beyzagül Akgün</span><span class="antrenor-row-role">Antrenör</span></div>
                     <div class="antrenor-row"><span class="antrenor-row-name">Cerem Karsak</span><span class="antrenor-row-role">Antrenör</span></div>
                     <div class="antrenor-row"><span class="antrenor-row-name">Ceren Bal</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Beyzagül Akgün</span><span class="antrenor-row-role">Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Şükrü Kağan Çardaklı</span><span class="antrenor-row-role">Stajyer</span></div>
                 </div>
             </div>
 
@@ -1247,6 +1265,7 @@
                 <div class="antrenor-brans-header abh-pilates">🧘 Pilates</div>
                 <div class="antrenor-list">
                     <div class="antrenor-row"><span class="antrenor-row-name">Nur Seda Ay</span><span class="antrenor-row-role">Baş Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Şahika Yurttaş</span><span class="antrenor-row-role">Antrenör</span></div>
                     <div class="antrenor-row"><span class="antrenor-row-name">Özge Başar</span><span class="antrenor-row-role">Antrenör</span></div>
                     <div class="antrenor-row"><span class="antrenor-row-name">Eylül Beste Zeren</span><span class="antrenor-row-role">Antrenör</span></div>
                 </div>
@@ -1265,6 +1284,7 @@
                 <div class="antrenor-brans-header abh-masa">🏓 Masa Tenisi</div>
                 <div class="antrenor-list">
                     <div class="antrenor-row"><span class="antrenor-row-name">Şahika Yurttaş</span><span class="antrenor-row-role">Baş Antrenör</span></div>
+                    <div class="antrenor-row"><span class="antrenor-row-name">Melih Ceylan</span><span class="antrenor-row-role">Antrenör</span></div>
                 </div>
             </div>
 
@@ -1298,7 +1318,7 @@
                 </div>
             </div>
             <div class="tesis-brans-card reveal" onclick="openTesis('voleybol')">
-                <img src="images/basketbol3.jpg" alt="Voleybol" loading="lazy">
+                <img src="images/basketbol3.jpg" alt="DPÜ Ana Spor Salonu – Voleybol" loading="lazy">
                 <div class="tesis-brans-overlay">
                     <div class="tesis-brans-ico">🏐</div>
                     <div class="tesis-brans-name">Voleybol</div>
@@ -1543,7 +1563,7 @@
             <div class="duyuru-card reveal">
                 <div class="duyuru-date">Şubat 2025</div>
                 <h3>Yüzme Kursu – Yeni Grup Açıldı</h3>
-                <p>Yüzme branşımızda yeni başlangıç grubu açılmıştır. 6 yaş ve üzeri tüm bireyler başvurabilir.</p>
+                <p>Yüzme branşımızda yeni başlangıç grubu açılmıştır. 5 yaş ve üzeri tüm bireyler başvurabilir.</p>
                 <span class="duyuru-tag">Yüzme</span>
             </div>
             <div class="duyuru-card reveal">
@@ -1724,14 +1744,14 @@
                     <span>DPÜ öğrencisi olmak şart mı?</span>
                     <span class="sss-icon">+</span>
                 </div>
-                <div class="sss-a">Hayır, DPÜ öğrencisi olmanıza gerek yoktur. Kulübümüz Kütahya'da yaşayan herkese açıktır. Çocuklar, gençler ve yetişkinler dahil tüm yaş grupları kayıt yaptırabilir.</div>
+                <div class="sss-a">Hayır, DPÜ öğrencisi olmanıza gerek yoktur. Kulübümüz herkese açıktır. Çocuklar, gençler ve yetişkinler dahil tüm yaş grupları kayıt yaptırabilir.</div>
             </div>
             <div class="sss-item reveal">
                 <div class="sss-q" onclick="toggleSss(this)">
-                    <span>Antrenörler profesyonel mi?</span>
+                    <span>Eğitimleri kimler veriyor?</span>
                     <span class="sss-icon">+</span>
                 </div>
-                <div class="sss-a">Evet. Tüm antrenörlerimiz branşlarında lisanslı ve deneyimlidir. Kulübümüz DPÜ Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde faaliyet göstermektedir.</div>
+                <div class="sss-a">Tüm eğitimler, DPÜ Spor Bilimleri Fakültesi'nin lisansüstü ve lisans öğrencileri tarafından verilmektedir. Baş antrenörlerimizin tamamı lisansüstü öğrencilerinden ve branşında yeterli kademeye sahip antrenörlerden oluşmaktadır. Grup eğitimlerinde her branşta en az 3 antrenör görev almaktadır.</div>
             </div>
             <div class="sss-item reveal">
                 <div class="sss-q" onclick="toggleSss(this)">
@@ -1799,7 +1819,7 @@
                 </div>
                 <div class="map-wrap" style="position:relative;">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3101.845!2d29.925!3d39.418!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca1df5c0917c0b%3A0x9e08a1a1b1b1b1b1!2sDumlup%C4%B1nar%20%C3%9Cniversitesi%20Spor%20Bilimleri%20Fak%C3%BCltesi!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="DPÜ Konum"></iframe>
-                    <a href="https://maps.google.com/?q=Dumlupınar+Üniversitesi+Spor+Bilimleri+Fakültesi+Kütahya" target="_blank" style="display:block;text-align:center;margin-top:.7rem;background:var(--navy);color:#fff;padding:.6rem 1.2rem;border-radius:10px;font-size:.82rem;font-weight:700;text-decoration:none;transition:.2s;" onmouseover="this.style.background='var(--red)'" onmouseout="this.style.background='var(--navy)'">📍 Google Maps'te Aç</a>
+                    <a href="https://maps.google.com/?q=Dumlupınar+Üniversitesi+Spor+Bilimleri+Fakültesi+Kütahya" target="_blank" class="maps-link">📍 Google Maps'te Aç</a>
                 </div>
             </div>
             <div class="form-box reveal">
@@ -1855,7 +1875,7 @@
                 <img src="images/dpü spor kulubü amblemi .webp" alt="DPÜ Spor Kulübü" style="width:48px;height:48px;object-fit:contain;">
                 <div class="fb-name">DPÜ Spor Kulübü<small>DUMLUPINAR ÜNİVERSİTESİ</small></div>
             </div>
-            <p>Kütahya'nın en çok branşta eğitim veren spor kulübü. DPÜ Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde 8 farklı branşta kaliteli spor eğitimi.</p>
+            <p>Kütahya'nın en çok branşta eğitim veren spor kulübü. DPÜ Spor Bilimleri Fakültesi akademisyenlerinin gözetiminde 8 farklı branşta kaliteli beden eğitimi ve spor.</p>
         </div>
         <div class="fcol">
             <h4>Branşlar</h4>
@@ -1932,7 +1952,7 @@
 <script>
 // ── BRANŞ MODAL ──
 const BRANS_DATA = {
-    yuzme:      { icon:'🏊', name:'Yüzme',       img:'images/brans-yuzme.jpg',      desc:'Olimpik havuzda profesyonel yüzme eğitimi. Çocuklar ve yetişkinler için ayrı programlarla temel tekniklerden ileri antrenmanlarına kadar.',                                                     infos:[['👶','Tüm yaş grupları'],['📍','DPÜ Yüzme Havuzu']],                                                           ig:'https://www.instagram.com/dpusk.yuzme',         igH:'@dpusk.yuzme' },
+    yuzme:      { icon:'🏊', name:'Yüzme',       img:'images/brans-yuzme.jpg',      desc:'Olimpik havuzda profesyonel yüzme eğitimi. Çocuklar ve yetişkinler için ayrı programlarla temel tekniklerden ileri antrenmanlarına kadar.',                                                     infos:[['👶','5 yaş ve üzeri'],['📍','DPÜ Yüzme Havuzu']],                                                           ig:'https://www.instagram.com/dpusk.yuzme',         igH:'@dpusk.yuzme' },
     basketbol:  { icon:'🏀', name:'Basketbol',    img:'images/brans-basketbol.jpg',  desc:'6-16 yaş kız ve erkek çocuklara yönelik basketbol eğitimi. Temel becerilerden taktiksel oyun anlayışına kadar kapsamlı gelişim.',                                                               infos:[['🎂','6-16 yaş, Kız & Erkek'],['📍','DPÜ Spor Salonu, Kütahya'],['🕐','Cuma 18:30'],['🕐','Cumartesi & Pazar 14:30–17:30']], ig:'https://www.instagram.com/dpusk.basketbol',     igH:'@dpusk.basketbol' },
     voleybol:   { icon:'🏐', name:'Voleybol',     img:'images/brans-voleybol.jpg',   desc:'Voleybolun temel tekniklerini öğrenmek veya mevcut seviyeni geliştirmek isteyenler için kapsamlı eğitim. Takım ruhu ve teknik gelişim.',                                                       infos:[['👥','Takım eğitimi'],['📍','DPÜ Spor Salonu']],                                                               ig:'https://www.instagram.com/dpuskvoleybol',       igH:'@dpuskvoleybol' },
     tenis:      { icon:'🎾', name:'Tenis',        img:'images/brans-tenis.jpg',      desc:'Başlangıçtan ileri seviyeye tenis eğitimi. Raket tutuşundan strateji ve koordinasyona kadar her aşamada profesyonel destek.',                                                                   infos:[['🎯','Başlangıç – İleri Seviye'],['📍','DPÜ Tenis Kortları']],                                                 ig:'https://www.instagram.com/dpusktenis',          igH:'@dpusktenis' },
@@ -2217,7 +2237,7 @@ function sendForm(e){
     const mesaj = inputs[inputs.length-1].value.trim();
 
     const metin =
-`🏅 *DPÜ Spor Kulübü - Yeni Kayıt Talebi*
+`🏅 *DPÜ Spor Kulübü - İletişim ve Kayıt Formu*
 
 👤 *Ad Soyad:* ${ad} ${soyad}
 📞 *Telefon:* ${tel}
