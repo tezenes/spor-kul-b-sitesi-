@@ -1,0 +1,19 @@
+# Büyük görsel dosyaları
+*.jpeg
+*.jpg
+*.png
+*.webp
+*.gif
+*.bmp
+*.svg
+
+# Görsel klasörleri
+images/
+tenis fotoğraflar/
+masa tenisi tesis/
+
+# Diğer
+node_modules/
+.expo/
+.agent-temp/
+package-lock.json
